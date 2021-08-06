@@ -47,7 +47,7 @@ public class EmployeeService {
         if (status.isEmpty()) {
             employees = employeeRepository.findAll();
         } else {
-            employees = employeeRepository.findAllByStatus(status.orElseThrow(() -> new EmployeeNotFoundException("Employee not found with this status:" + status)));
+            employees = employeeRepository.findAllByStatus(status.get());
         }
         Type targetListType = new TypeToken<List<EmployeeDTO>>() {}.getType();
 
