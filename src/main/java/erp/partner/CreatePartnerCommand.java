@@ -23,5 +23,7 @@ public class CreatePartnerCommand {
     @IsCompleteAddress
     private Address address;
 
+    @NotBlank(message = "Tax number cannot be null or blank")
+    @Schema(example = "9235684972")
     private String taxNo;
 }

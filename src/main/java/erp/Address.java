@@ -11,18 +11,14 @@ import java.util.Objects;
 @Embeddable
 public class Address {
 
-    @NotBlank(message = "Country name cannot be null or blank")
-    @Length(max = 30, message = "Country name maximum length is 30")
     @Schema(example = "Hungary")
     public String country;
 
-    @NotBlank(message = "Zip Code cannot be null or blank")
-    @Length(max = 10, message = "Zip Code maximum length is 10")
+
     @Schema(example = "H-1026")
     public String zipCode;
 
-    @NotBlank(message = "Address line cannot be null or blank")
-    @Length(max = 50, message = "Address line maximum length is 50")
+
     @Schema(example = "Pasareti ut 101.")
     public String line;
 

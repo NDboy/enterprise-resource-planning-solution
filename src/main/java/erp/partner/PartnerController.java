@@ -39,7 +39,7 @@ public class PartnerController {
     @PutMapping("/{id}/ibans")
     @Operation(summary = "find partner by id and add new iban",
             description = "find partner by id and add new iban")
-    public PartnerDTO addIban(@PathVariable("id") String id, @RequestBody AddIbanCommand command) {
+    public PartnerDTO addIban(@PathVariable("id") String id, @Valid @RequestBody AddIbanCommand command) {
         return partnerService.addIban(id, command);
     }
 
