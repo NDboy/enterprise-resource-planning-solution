@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class MyGenerator implements IdentifierGenerator, Configurable {
+public class MyIdGenerator implements IdentifierGenerator, Configurable {
 
     private String prefix;
 
