@@ -2,12 +2,14 @@ package erp.employee;
 
 import erp.Address;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "employees")
 public class Employee {
 
@@ -25,9 +27,6 @@ public class Employee {
     private Address address;
 
     private LocalDate entryDate;
-
-    public Employee() {
-    }
 
     public Employee(String firstName, String lastName, EmployeeStatus status, Address address, LocalDate entryDate) {
         generateIdByName(firstName, lastName);
