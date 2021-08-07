@@ -1,7 +1,6 @@
 package erp.partner;
 
 import erp.Address;
-import erp.employee.EmployeeDTO;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
