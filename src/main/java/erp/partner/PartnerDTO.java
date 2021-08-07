@@ -18,6 +18,8 @@ public class PartnerDTO {
 
     private Address address;
 
+    private String taxNo;
+
     private Set<String> ibans;
 
 }

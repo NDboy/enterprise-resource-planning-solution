@@ -22,7 +22,7 @@ public class PartnerService {
     }
 
     public PartnerDTO createPartner(CreatePartnerCommand command) {
-        Partner partner = new Partner(command.getName(), command.getAddress());
+        Partner partner = new Partner(command.getName(), command.getAddress(), command.getTaxNo());
         partnerRepository.save(partner);
         System.out.println(partner);
         PartnerDTO partnerDTO = modelMapper.map(partner, PartnerDTO.class);

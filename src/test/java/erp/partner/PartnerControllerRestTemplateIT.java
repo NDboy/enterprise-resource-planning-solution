@@ -34,19 +34,19 @@ public class PartnerControllerRestTemplateIT {
     private Tuple tuple1;
     private Tuple tuple2;
 
-    private final String[] PARAMETERS_FOR_TUPLE_NO_IBANS = new String[] {"id", "name", "address"};
-    private final String[] PARAMETERS_FOR_TUPLE = new String[] {"id", "name", "address", "ibans"};
+    private final String[] PARAMETERS_FOR_TUPLE_NO_IBANS = new String[] {"id", "name", "address", "taxNo"};
+    private final String[] PARAMETERS_FOR_TUPLE = new String[] {"id", "name", "address", "taxNo", "ibans"};
     private Address address;
 
     @BeforeEach
     void init() {
         address = new Address("Hungary", "H-1029", "Pasareti ut 101.");
 
-        createPartnerCommand1 = new CreatePartnerCommand("Anthony Company ltd.", address);
-        tuple1 = tuple("P-1", "Anthony Company ltd.", address);
+        createPartnerCommand1 = new CreatePartnerCommand("Anthony Company ltd.", address, "123456789");
+        tuple1 = tuple("P-1", "Anthony Company ltd.", address, "123456789");
 
-        createPartnerCommand2 = new CreatePartnerCommand("Doerr Company ltd.", address);
-        tuple2 = tuple("P-2", "Doerr Company ltd.", address);
+        createPartnerCommand2 = new CreatePartnerCommand("Doerr Company ltd.", address, "987654321");
+        tuple2 = tuple("P-2", "Doerr Company ltd.", address, "987654321");
 
     }
 

@@ -4,6 +4,7 @@ create table partners
     name     varchar(50),
     country  varchar(30),
     zip_code varchar(10),
+    tax_no   varchar(20),
     line     varchar(50),
     primary key (id)
 );

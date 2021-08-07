@@ -23,5 +23,5 @@ public class CreatePartnerCommand {
     @IsCompleteAddress
     private Address address;
 
-
+    private String taxNo;
 }

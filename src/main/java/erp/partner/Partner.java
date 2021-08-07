@@ -22,19 +22,22 @@ public class Partner {
     @GeneratedValue(generator = "partner-generator")
     @GenericGenerator(name = "partner-generator",
             parameters = @Parameter(name = "prefix", value = "P"),
-            strategy = "erp.MyGenerator")
+            strategy = "erp.MyIdGenerator")
     private String id;
 
     private String name;
 
     private Address address;
 
+    private String taxNo;
+
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> ibans;
 
-    public Partner(String name, Address address) {
+    public Partner(String name, Address address, String taxNo) {
         this.name = name;
         this.address = address;
+        this.taxNo = taxNo;
     }
 
     public void addIban(String iban) {
