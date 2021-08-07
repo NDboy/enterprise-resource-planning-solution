@@ -4,7 +4,6 @@ import erp.Address;
 import erp.IsCompleteAddress;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
@@ -25,6 +24,9 @@ public class CreatePartnerCommand {
     @NotBlank(message = "Tax number cannot be null or blank")
     @Schema(example = "9235684972")
     private String taxNo;
+
+
+
 
     public String getName() {
         return name;

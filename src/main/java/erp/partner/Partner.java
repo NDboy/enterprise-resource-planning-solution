@@ -58,14 +58,6 @@ public class Partner {
         ibans.add(iban);
     }
 
-    public void addAPInvoice(APInvoice apInvoice) {
-        apInvoice.setPartner(this);
-        if (apInvoices == null) {
-            apInvoices = new ArrayList<>();
-        }
-        apInvoices.add(apInvoice);
-    }
-
     public String getId() {
         return id;
     }
