@@ -142,7 +142,7 @@ public class EmployeeControllerRestTemplateIT {
 
     @Test
     void testShouldThrowEmployeeNotFoundException() {
-        EmployeeDTO employeeDTO = template.postForObject("/api/employees", createEmployeeCommand1, EmployeeDTO.class);
+        template.postForObject("/api/employees", createEmployeeCommand1, EmployeeDTO.class);
 
         Problem result = template.getForObject("/api/employees/xxx", Problem.class);
 
