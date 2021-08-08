@@ -4,13 +4,11 @@ import erp.Address;
 import erp.apinvoice.APInvoice;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,7 +24,7 @@ public class Partner {
     @GenericGenerator(name = "partner-generator",
             parameters = @Parameter(name = "prefix", value = "P"),
             strategy = "erp.MyIdGenerator")
-    @Schema(example = "P-2-PartnerSchema")
+    @Schema(example = "P-2")
     private String id;
 
     @Schema(example = "Jaguar-PartnerSchema")
@@ -42,7 +40,7 @@ public class Partner {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> ibans = new HashSet<>();
 
-    @OneToMany(mappedBy = "partner")
+    @OneToMany
     private List<APInvoice> apInvoices;
 
     public Partner(String name, Address address, String taxNo) {

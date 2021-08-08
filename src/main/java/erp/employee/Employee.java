@@ -1,6 +1,7 @@
 package erp.employee;
 
 import erp.Address;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -16,8 +17,10 @@ public class Employee {
     @Id
     private String id;
 
+    @Schema(example = "Anthony")
     private String firstName;
 
+    @Schema(example = "Doerr")
     private String lastName;
 
     @Enumerated(value = EnumType.STRING)
