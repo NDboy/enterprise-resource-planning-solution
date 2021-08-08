@@ -20,17 +20,14 @@ public class CreateAPInvoiceCommand {
     private String invNum;
 
     @IsValidPaymentModeAndDates
-    @Embedded
     private PaymentModeAndDates paymentModeAndDates;
 
     @NotNull(message = "Invoice can not be created without invoice status")
-    @Enumerated(value = EnumType.STRING)
     @Schema(example = "OPEN")
     private InvoiceStatus invoiceStatus;
 
     @IsValidInvoiceItems
     @NotNull(message = "Invoice can not be created without items")
-    @ElementCollection
     private List<InvoiceItem> invoiceItems;
 
     public String getInvNum() {
