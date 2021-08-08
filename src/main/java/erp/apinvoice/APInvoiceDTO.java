@@ -1,5 +1,6 @@
 package erp.apinvoice;
 
+import erp.employee.Employee;
 import erp.partner.Partner;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,8 @@ public class APInvoiceDTO {
     private InvoiceStatus invoiceStatus;
 
     private List<InvoiceItem> invoiceItems;
+
+    private Employee employee;
 
     public String getId() {
         return id;
@@ -71,4 +74,11 @@ public class APInvoiceDTO {
         this.invoiceItems = invoiceItems;
     }
 
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 }

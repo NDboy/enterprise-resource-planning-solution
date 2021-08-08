@@ -38,7 +38,7 @@ public class APInvoice {
     @ElementCollection
     private List<InvoiceItem> invoiceItems;
 
-    @Transient
+    @OneToOne
     private Employee employee;
 
     @OneToMany
@@ -105,5 +105,13 @@ public class APInvoice {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public List<Accounting> getAccountings() {
+        return accountings;
+    }
+
+    public void setAccountings(List<Accounting> accountings) {
+        this.accountings = accountings;
     }
 }

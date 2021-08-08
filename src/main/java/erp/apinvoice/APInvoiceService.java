@@ -1,6 +1,12 @@
 package erp.apinvoice;
 
 
+import erp.acounting.Accounting;
+import erp.acounting.AccountingService;
+import erp.employee.Employee;
+import erp.employee.EmployeeNotFoundException;
+import erp.employee.EmployeeRepository;
+import erp.employee.EmployeeService;
 import erp.partner.Partner;
 import erp.partner.PartnerNotFoundException;
 import erp.partner.PartnerRepository;
@@ -11,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,7 +32,9 @@ public class APInvoiceService {
 
     private PartnerRepository partnerRepository;
 
+    private AccountingService accountingService;
 
+    private EmployeeRepository employeeRepository;
 
     public APInvoiceDTO createAPInvoice(CreateAPInvoiceCommand command) {
         List<InvoiceItem> invoiceItems = command.getInvoiceItems()
@@ -45,7 +54,7 @@ public class APInvoiceService {
         } else {
             apInvoices = apInvoiceRepository.findAllByPartnerId(partnerid.get());
         }
-        Type targetListType = new TypeToken<List<APInvoice>>() {}.getType();
+        Type targetListType = new TypeToken<List<APInvoiceDTO>>() {}.getType();
         return modelMapper.map(apInvoices, targetListType);
     }
 
@@ -59,13 +68,24 @@ public class APInvoiceService {
     public APInvoiceDTO addNewPartner(String id, AddNewPartnerCommand command) {
         APInvoice apInvoice = apInvoiceRepository.findById(id)
                 .orElseThrow(() -> new APInvoiceNotFoundException(id));
-        Partner partner = command.getPartner();
-        if (partner.getId() != null) {
-            partner = partnerRepository.findById(partner.getId()).orElseThrow(() -> new PartnerNotFoundException(id));
-        } else {
-            partnerRepository.save(partner);
-        }
-        apInvoice.setPartner(partner);
+        String partnerId = command.getPartnerId();
+        Partner partner = partnerRepository.findById(partnerId).orElseThrow(() -> new PartnerNotFoundException(partnerId));
+        partnerRepository.save(partner);
+
+        return modelMapper.map(apInvoice, APInvoiceDTO.class);
+    }
+
+    @Transactional
+    public APInvoiceDTO addNewEmployee(String id, AddNewEmployeeCommand command) {
+        APInvoice apInvoice = apInvoiceRepository.findById(id)
+                .orElseThrow(() -> new APInvoiceNotFoundException(id));
+        String employeeId = command.getEmployeeId();
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(() -> new EmployeeNotFoundException(employeeId));
+        employeeRepository.save(employee);
+
+        Accounting accounting = new Accounting(LocalDate.now(), employee, apInvoice.getInvoiceStatus(), apInvoice);
+        accountingService.createAccounting(accounting);
+
         return modelMapper.map(apInvoice, APInvoiceDTO.class);
     }
 
@@ -80,10 +100,12 @@ public class APInvoiceService {
         APInvoice apInvoice = apInvoiceRepository.findById(id)
                 .orElseThrow(() -> new APInvoiceNotFoundException(id));
         apInvoice.setInvoiceStatus(command.getInvoiceStatus());
+        String employeeId = command.getEmployeeId();
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(() -> new EmployeeNotFoundException(employeeId));
+
+        accountingService.createAccounting(new Accounting(LocalDate.now(), employee, command.getInvoiceStatus(), apInvoice));
+
         return modelMapper.map(apInvoice, APInvoiceDTO.class);
     }
-
-
-
 }
 

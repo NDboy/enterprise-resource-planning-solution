@@ -1,6 +1,5 @@
 package erp.apinvoice;
 
-import erp.partner.PartnerDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -58,10 +57,12 @@ public class APInvoiceController {
         return apInvoiceService.changeInvoiceStatus(id, command);
     }
 
-
-
-
-
+    @PutMapping("/{id}/employee")
+    @Operation(summary = "find A/P invoice by id and add new employee, putting an existing partner id, no need to fill other data",
+            description = "find A/P invoice by id and add new employee, putting an existing partner id, no need to fill other data")
+    public APInvoiceDTO addEmployee(@PathVariable("id") String id, @RequestBody AddNewEmployeeCommand command) {
+        return apInvoiceService.addNewEmployee(id, command);
+    }
 
 
 

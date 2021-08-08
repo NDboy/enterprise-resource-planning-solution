@@ -10,9 +10,10 @@ import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddNewPartnerCommand {
+public class AddNewEmployeeCommand {
 
     @NotBlank
-    @Schema(example = "P-1")
-    private String partnerId;
+    @Schema(example = "ado")
+    private String employeeId;
+
 }

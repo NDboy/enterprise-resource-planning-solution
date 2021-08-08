@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
@@ -15,5 +16,9 @@ public class ChangeInvoiceStatusCommand {
     @NotNull(message = "OPEN, PAYED or CANCELED")
     @Schema(example = "CANCELED")
     private InvoiceStatus invoiceStatus;
+
+    @NotBlank
+    @Schema(example = "ado")
+    private String employeeId;
 
 }
