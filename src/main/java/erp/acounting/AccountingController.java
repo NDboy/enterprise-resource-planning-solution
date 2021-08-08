@@ -1,6 +1,5 @@
 package erp.acounting;
 
-import erp.apinvoice.APInvoiceDTO;
 import erp.apinvoice.InvoiceStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
