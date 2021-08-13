@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
+//@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddIbanCommand {
@@ -18,4 +18,11 @@ public class AddIbanCommand {
     @Schema(example = "HU123456-12345678")
     private String iban;
 
+    public String getIban() {
+        return iban;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
 }

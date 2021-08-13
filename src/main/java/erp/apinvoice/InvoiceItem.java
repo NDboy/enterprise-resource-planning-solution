@@ -86,14 +86,14 @@ public class InvoiceItem {
         this.grossPrice = grossPrice;
     }
 
-    @Override
-    public String toString() {
-        return "InvoiceItem{" +
-                "itemName='" + itemName + '\'' +
-                ", netPrice=" + netPrice +
-                ", vatRate=" + vatRate +
-                ", vatAmount=" + vatAmount +
-                ", grossPrice=" + grossPrice +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "InvoiceItem{" +
+//                "itemName='" + itemName + '\'' +
+//                ", netPrice=" + netPrice +
+//                ", vatRate=" + vatRate +
+//                ", vatAmount=" + vatAmount +
+//                ", grossPrice=" + grossPrice +
+//                '}';
+//    }
 }

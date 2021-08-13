@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "accountings")
-@Data
+//@Data
 public class Accounting {
 
     @Id
@@ -41,6 +41,46 @@ public class Accounting {
         this.accountingDate = accountingDate;
         this.employee = employee;
         this.invoiceStatus = invoiceStatus;
+        this.apInvoice = apInvoice;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public LocalDate getAccountingDate() {
+        return accountingDate;
+    }
+
+    public void setAccountingDate(LocalDate accountingDate) {
+        this.accountingDate = accountingDate;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public InvoiceStatus getInvoiceStatus() {
+        return invoiceStatus;
+    }
+
+    public void setInvoiceStatus(InvoiceStatus invoiceStatus) {
+        this.invoiceStatus = invoiceStatus;
+    }
+
+    public APInvoice getApInvoice() {
+        return apInvoice;
+    }
+
+    public void setApInvoice(APInvoice apInvoice) {
         this.apInvoice = apInvoice;
     }
 }

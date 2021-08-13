@@ -3,10 +3,12 @@ package erp.apinvoice;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -18,16 +20,19 @@ public class APInvoiceController {
     APInvoiceService apInvoiceService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "create an A/P invoice", description = "create an A/P invoice")
     public APInvoiceDTO createAPInvoice(@Valid @RequestBody CreateAPInvoiceCommand command) {
         return apInvoiceService.createAPInvoice(command);
     }
 
     @GetMapping
-    @Operation(summary = "list all invoices or filter by partner id, (filtering syntax = /api/apinvoices?partnerid=companyId)",
-            description = "list all invoices or filter by partner id")
-    public List<APInvoiceDTO> listAPInvoicesOrFilteredByPartnerId(@RequestParam Optional<String> partnerid) {
-        return apInvoiceService.listAPInvoicesOrFilteredByPartnerId(partnerid);
+    @Operation(summary = "filter invoices by different parameters, \n" +
+            "(examples: invNum, paymentMode, dueDate is before , partnerId, employeeId, invoiceStatus, accountingDate is after; filtering syntax = /api/apinvoices?partnerid=companyId)",
+            description = "filter invoices by different parameters, \n" +
+                    "\"(examples: invNum, paymentMode, dueDate is before, partnerId, employeeId, invoiceStatus, accountingDate is after; filtering syntax = /api/apinvoices?partnerid=companyId)")
+    public List<APInvoiceDTO> filterAPInvoicesByDifferentParameters(@RequestParam Map<String, String> params) {
+        return apInvoiceService.filterInvoicesByDifferentParams(params);
     }
 
     @GetMapping("/{id}")

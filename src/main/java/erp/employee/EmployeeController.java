@@ -31,6 +31,7 @@ public class EmployeeController {
 
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "create an employee", description = "create an employee")
     public EmployeeDTO createEmployee(@Valid @RequestBody CreateEmployeeCommand command) {
         return employeeService.createEmployee(command);

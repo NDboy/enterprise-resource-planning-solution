@@ -1,6 +1,9 @@
 package erp.apinvoice;
 
 import erp.Address;
+import erp.employee.CreateEmployeeCommand;
+import erp.employee.EmployeeDTO;
+import erp.employee.EmployeeStatus;
 import erp.partner.CreatePartnerCommand;
 import erp.partner.Partner;
 import erp.partner.PartnerDTO;
@@ -24,14 +27,16 @@ import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(statements = {"delete from apinvoice_invoice_items",
-                    "delete from partners_ap_invoices",
-                    "delete from ap_invoices",
-                    "delete from partner_ibans",
-                    "delete from partners",
-                    "delete from employees",
-                    "delete from accountings",
-                    "delete from ap_invoices_accountings"})
+@Sql(statements = {
+        "delete from accountings",
+        "delete from apinvoice_invoice_items",
+        "delete from partners_ap_invoices",
+        "delete from partner_ibans",
+        "delete from ap_invoices_accountings",
+        "delete from ap_invoices",
+        "delete from employees",
+        "delete from partners"
+                    })
 public class APInvoiceControllerRestTemplateIT {
 
     @Autowired
@@ -128,8 +133,6 @@ public class APInvoiceControllerRestTemplateIT {
                         null,
                         new ParameterizedTypeReference<List<APInvoiceDTO>>(){}).getBody();
 
-        System.out.println(apInvoiceDTOsWithPartner);
-
         assertThat(apInvoiceDTOsWithPartner)
                 .hasSize(2)
                 .extracting("partner")
@@ -137,60 +140,73 @@ public class APInvoiceControllerRestTemplateIT {
                 .containsExactly("P-1", "P-1");
     }
 
+//    @Test
+//    void testFindInvoiceByPartnerId() {
+//        String invoiceId1 = apInvoiceDTO1.getId();
+//        String invoiceId2 = apInvoiceDTO2.getId();
+//        PartnerDTO partnerDTO = template.postForObject("/api/partners", new CreatePartnerCommand("Anthony ltd.", address, "1122334455"), PartnerDTO.class);
+//
+//        String partnerId = partnerDTO.getId();
+//
+//        template.put("/api/apinvoices/" + invoiceId1 + "/partner", new AddNewPartnerCommand(partnerId));
+//        template.put("/api/apinvoices/" + invoiceId2 + "/partner", new AddNewPartnerCommand(partnerId));
+//
+//        List<APInvoiceDTO> apInvoiceDTOsWithPartner = template.exchange("/api/apinvoices?partnerId=" + partnerId,
+//                        HttpMethod.GET,
+//                        null,
+//                        new ParameterizedTypeReference<List<APInvoiceDTO>>(){}).getBody();
+//
+//        assertThat(apInvoiceDTOsWithPartner)
+//                .hasSize(2)
+//                .extracting("id")
+//                .containsExactly("E21-1", "E21-2");
+//    }
+
     @Test
-    void testFindInvoiceByPartnerId() {
+    void testChangeInvoiceStatusAndFilterByInvoiceStatus() {
         String invoiceId1 = apInvoiceDTO1.getId();
         String invoiceId2 = apInvoiceDTO2.getId();
-        PartnerDTO partnerDTO = template.postForObject("/api/partners", new CreatePartnerCommand("Anthony ltd.", address, "1122334455"), PartnerDTO.class);
 
+        PartnerDTO partnerDTO = template.postForObject("/api/partners", new CreatePartnerCommand("Anthony ltd.", address, "1122334455"), PartnerDTO.class);
         String partnerId = partnerDTO.getId();
+
+        EmployeeDTO employeeDTO = template.postForObject("/api/employees", new CreateEmployeeCommand("Anthony", "Doerr", EmployeeStatus.ACTIVE, address, LocalDate.of(2021,8,1)), EmployeeDTO.class);
+        String employeeId = employeeDTO.getId();
 
         template.put("/api/apinvoices/" + invoiceId1 + "/partner", new AddNewPartnerCommand(partnerId));
         template.put("/api/apinvoices/" + invoiceId2 + "/partner", new AddNewPartnerCommand(partnerId));
 
-        List<APInvoiceDTO> apInvoiceDTOsWithPartner = template.exchange("/api/apinvoices?partnerId=" + partnerId,
+        template.put("/api/apinvoices/" + invoiceId1 + "/employee", new AddNewEmployeeCommand(employeeId));
+        template.put("/api/apinvoices/" + invoiceId2 + "/employee", new AddNewEmployeeCommand(employeeId));
+
+        template.put("/api/apinvoices/" + invoiceId1 + "/invoicestatus",
+                new ChangeInvoiceStatusCommand(InvoiceStatus.PAYED, employeeId));
+
+        String payed = InvoiceStatus.PAYED.toString();
+        String open = InvoiceStatus.OPEN.toString();
+
+        List<APInvoiceDTO> apInvoiceDTOsPayed = template.exchange("/api/apinvoices/invoicestatus?invoiceStatus=" + payed,
                         HttpMethod.GET,
                         null,
-                        new ParameterizedTypeReference<List<APInvoiceDTO>>(){}).getBody();
+                        new ParameterizedTypeReference<List<APInvoiceDTO>>(){})
+                .getBody();
 
-        assertThat(apInvoiceDTOsWithPartner)
-                .hasSize(2)
-                .extracting("id")
-                .containsExactly("E21-1", "E21-2");
+        assertThat(apInvoiceDTOsPayed)
+                .hasSize(1)
+                .extracting("invoiceStatus")
+                .containsExactly(InvoiceStatus.PAYED);
+
+        List<APInvoiceDTO> apInvoiceDTOsOpen = template.exchange("/api/apinvoices/invoicestatus?invoiceStatus=" + open,
+                        HttpMethod.GET,
+                        null,
+                        new ParameterizedTypeReference<List<APInvoiceDTO>>(){})
+                .getBody();
+
+        assertThat(apInvoiceDTOsOpen)
+                .hasSize(1)
+                .extracting("invoiceStatus")
+                .containsExactly(InvoiceStatus.OPEN);
     }
-
-//    @Test
-//    void testChangeInvoiceStatusAndFilterByInvoiceStatus() {
-//        String invoiceId1 = apInvoiceDTO1.getId();
-//
-//        template.put("/api/apinvoices/" + invoiceId1 + "/invoicestatus",
-//                new ChangeInvoiceStatusCommand(InvoiceStatus.PAYED));
-//
-//        String payed = InvoiceStatus.PAYED.toString();
-//        String open = InvoiceStatus.OPEN.toString();
-//
-//        List<APInvoiceDTO> apInvoiceDTOsPayed = template.exchange("/api/apinvoices/invoicestatus?invoiceStatus=" + payed,
-//                        HttpMethod.GET,
-//                        null,
-//                        new ParameterizedTypeReference<List<APInvoiceDTO>>(){})
-//                .getBody();
-//
-//        assertThat(apInvoiceDTOsPayed)
-//                .hasSize(1)
-//                .extracting("invoiceStatus")
-//                .containsExactly(InvoiceStatus.PAYED);
-//
-//        List<APInvoiceDTO> apInvoiceDTOsOpen = template.exchange("/api/apinvoices/invoicestatus?invoiceStatus=" + open,
-//                        HttpMethod.GET,
-//                        null,
-//                        new ParameterizedTypeReference<List<APInvoiceDTO>>(){})
-//                .getBody();
-//
-//        assertThat(apInvoiceDTOsOpen)
-//                .hasSize(1)
-//                .extracting("invoiceStatus")
-//                .containsExactly(InvoiceStatus.OPEN);
-//    }
 
     @Test
     void testShouldThrowPartnerNotFoundException() {

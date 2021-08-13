@@ -18,8 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,18 +47,6 @@ public class APInvoiceService {
         return modelMapper.map(apInvoice, APInvoiceDTO.class);
     }
 
-
-    public List<APInvoiceDTO> listAPInvoicesOrFilteredByPartnerId(Optional<String> partnerid) {
-        List<APInvoice> apInvoices;
-        if (partnerid.isEmpty()) {
-            apInvoices = apInvoiceRepository.findAll();
-        } else {
-            apInvoices = apInvoiceRepository.findAllByPartnerId(partnerid.get());
-        }
-        Type targetListType = new TypeToken<List<APInvoiceDTO>>() {}.getType();
-        return modelMapper.map(apInvoices, targetListType);
-    }
-
     public APInvoiceDTO findAPInvoiceById(String id) {
         APInvoice apInvoice = apInvoiceRepository.findById(id)
                 .orElseThrow(() -> new APInvoiceNotFoundException(id));
@@ -70,8 +59,8 @@ public class APInvoiceService {
                 .orElseThrow(() -> new APInvoiceNotFoundException(id));
         String partnerId = command.getPartnerId();
         Partner partner = partnerRepository.findById(partnerId).orElseThrow(() -> new PartnerNotFoundException(partnerId));
-        partnerRepository.save(partner);
 
+        apInvoice.setPartner(partner);
         return modelMapper.map(apInvoice, APInvoiceDTO.class);
     }
 
@@ -81,11 +70,11 @@ public class APInvoiceService {
                 .orElseThrow(() -> new APInvoiceNotFoundException(id));
         String employeeId = command.getEmployeeId();
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(() -> new EmployeeNotFoundException(employeeId));
-        employeeRepository.save(employee);
 
+        apInvoice.setEmployee(employee);
         Accounting accounting = new Accounting(LocalDate.now(), employee, apInvoice.getInvoiceStatus(), apInvoice);
         accountingService.createAccounting(accounting);
-
+//        apInvoice.addAccounting(accounting);
         return modelMapper.map(apInvoice, APInvoiceDTO.class);
     }
 
@@ -102,10 +91,38 @@ public class APInvoiceService {
         apInvoice.setInvoiceStatus(command.getInvoiceStatus());
         String employeeId = command.getEmployeeId();
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(() -> new EmployeeNotFoundException(employeeId));
-
-        accountingService.createAccounting(new Accounting(LocalDate.now(), employee, command.getInvoiceStatus(), apInvoice));
+        apInvoice.setEmployee(employee);
+        Accounting accounting = new Accounting(LocalDate.now(), employee, command.getInvoiceStatus(), apInvoice);
+        accountingService.createAccounting(accounting);
+//        apInvoice.addAccounting(accounting);
 
         return modelMapper.map(apInvoice, APInvoiceDTO.class);
+    }
+
+//    examples: invNum, paymentMode, dueDate is before, partnerId, employeeId, invoiceStatus, accountingDate is after
+    public List<APInvoiceDTO> filterInvoicesByDifferentParams(Map<String, String> params) {
+        List<APInvoice> apInvoices = new ArrayList<>();
+        Type targetListType = new TypeToken<List<APInvoiceDTO>>() {}.getType();
+        if (params == null || params.isEmpty()) {
+            apInvoices = apInvoiceRepository.findAll();
+            return modelMapper.map(apInvoices, targetListType);
+        }
+        if (params.containsKey("invNum")) {
+            apInvoices = apInvoiceRepository.findByInvNumEqualsIgnoreCase(params.get("invNum"));
+        } else if (params.containsKey("paymentMode")){
+            apInvoices = apInvoiceRepository.findByPaymentMode(PaymentMode.valueOf(params.get("paymentMode")));
+        } else if (params.containsKey("dueDate")){
+            apInvoices = apInvoiceRepository.findByDueDateIsBefore(LocalDate.parse(params.get("dueDate")));
+        } else if (params.containsKey("partnerId")){
+            apInvoices = apInvoiceRepository.findByPartnerId(params.get("partnerId"));
+        } else if (params.containsKey("employeeId")){
+            apInvoices = apInvoiceRepository.findByEmployeeId(params.get("employeeId"));
+        } else if (params.containsKey("invoiceStatus")){
+            apInvoices = apInvoiceRepository.findAllByInvoiceStatus(InvoiceStatus.valueOf(params.get("invoiceStatus")));
+        } else if (params.containsKey("accountingDate")){
+            apInvoices = apInvoiceRepository.findByAccountingDateIsAfter(LocalDate.parse(params.get("accountingDate")));
+        }
+        return modelMapper.map(apInvoices, targetListType);
     }
 }
 

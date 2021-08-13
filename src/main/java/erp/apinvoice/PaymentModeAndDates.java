@@ -10,9 +10,10 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Embeddable
-@Data
+//@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentModeAndDates {
@@ -29,4 +30,41 @@ public class PaymentModeAndDates {
     @NotBlank(message = "Due date cannot be null or blank")
     @Schema(example = "2021-08-06")
     private LocalDate dueDate;
+
+    public PaymentMode getPaymentMode() {
+        return paymentMode;
+    }
+
+    public void setPaymentMode(PaymentMode paymentMode) {
+        this.paymentMode = paymentMode;
+    }
+
+    public LocalDate getInvoicingDate() {
+        return invoicingDate;
+    }
+
+    public void setInvoicingDate(LocalDate invoicingDate) {
+        this.invoicingDate = invoicingDate;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PaymentModeAndDates that = (PaymentModeAndDates) o;
+        return paymentMode == that.paymentMode && Objects.equals(invoicingDate, that.invoicingDate) && Objects.equals(dueDate, that.dueDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(paymentMode, invoicingDate, dueDate);
+    }
 }

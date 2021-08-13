@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -114,4 +115,11 @@ public class APInvoice {
     public void setAccountings(List<Accounting> accountings) {
         this.accountings = accountings;
     }
+
+//    public void addAccounting(Accounting accounting) {
+//        if (accountings == null) {
+//            accountings = new ArrayList<>();
+//        }
+//        accountings.add(accounting);
+//    }
 }

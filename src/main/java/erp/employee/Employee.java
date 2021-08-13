@@ -98,15 +98,5 @@ public class Employee {
         this.entryDate = entryDate;
     }
 
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "id='" + id + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", status=" + status +
-                ", address=" + address +
-                ", entryDate=" + entryDate +
-                '}';
-    }
+
 }

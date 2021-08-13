@@ -3,6 +3,7 @@ package erp.partner;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,6 +26,7 @@ public class PartnerController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "create a partner", description = "create a partner")
     public PartnerDTO createPartner(@Valid @RequestBody CreatePartnerCommand command) {
         return partnerService.createPartner(command);

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
+//@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddNewEmployeeCommand {
@@ -16,4 +16,11 @@ public class AddNewEmployeeCommand {
     @Schema(example = "ado")
     private String employeeId;
 
+    public String getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
+    }
 }
