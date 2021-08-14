@@ -1,6 +1,7 @@
 package erp.employee;
 
 import erp.Address;
+import erp.AddressDTO;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,16 +38,18 @@ public class EmployeeControllerRestTemplateIT {
 
     private final String[] PARAMETERS_FOR_TUPLE = new String[] {"id", "firstName", "lastName", "status", "address", "entryDate"};
     private Address address;
+    private AddressDTO addressDTO;
 
     @BeforeEach
     void init() {
         address = new Address("Hungary", "H-1029", "Pasareti ut 101.");
+        addressDTO = new AddressDTO("Hungary", "H-1029", "Pasareti ut 101.");
 
         createEmployeeCommand1 = new CreateEmployeeCommand("Anthony", "Doerr", PASSIVE, address, LocalDate.of(2021,8,5));
-        tuple1 = tuple("ado", "Anthony", "Doerr", PASSIVE, address, LocalDate.of(2021,8,5));
+        tuple1 = tuple("ado", "Anthony", "Doerr", PASSIVE, addressDTO, LocalDate.of(2021,8,5));
 
         createEmployeeCommand2 = new CreateEmployeeCommand("Jo", "Nesbo", ACTIVE, address, LocalDate.now());
-        tuple2 = tuple("jne", "Jo", "Nesbo", ACTIVE, address, LocalDate.now());
+        tuple2 = tuple("jne", "Jo", "Nesbo", ACTIVE, addressDTO, LocalDate.now());
 
     }
 
@@ -124,7 +127,7 @@ public class EmployeeControllerRestTemplateIT {
     void testFindEmployeeAndChangeAddress() {
         EmployeeDTO employeeDTO1 = template.postForObject("/api/employees", createEmployeeCommand1, EmployeeDTO.class);
         String id1 = employeeDTO1.getId();
-        Address addressOriginal = employeeDTO1.getAddress();
+        AddressDTO addressOriginal = employeeDTO1.getAddress();
 
         Address addressChanged = new Address("Hungary", "H-1025", "Hazman u. 5.");
         template.put("/api/employees/" + id1 + "/address",
@@ -136,8 +139,8 @@ public class EmployeeControllerRestTemplateIT {
                         EmployeeDTO.class)
                 .getBody();
 
-        assertEquals(address, addressOriginal);
-        assertEquals(addressChanged, result.getAddress());
+        assertEquals(address.getLine(), addressOriginal.getLine());
+        assertEquals(addressChanged.getLine(), result.getAddress().getLine());
     }
 
     @Test

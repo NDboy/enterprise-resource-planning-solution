@@ -1,6 +1,7 @@
 package erp.partner;
 
 import erp.Address;
+import erp.AddressDTO;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,18 +35,20 @@ public class PartnerControllerRestTemplateIT {
     private Tuple tuple2;
 
     private final String[] PARAMETERS_FOR_TUPLE_NO_IBANS = new String[] {"id", "name", "address", "taxNo"};
-    private final String[] PARAMETERS_FOR_TUPLE = new String[] {"id", "name", "address", "taxNo", "ibans"};
+
     private Address address;
+    private AddressDTO addressDTO;
 
     @BeforeEach
     void init() {
         address = new Address("Hungary", "H-1029", "Pasareti ut 101.");
+        addressDTO = new AddressDTO("Hungary", "H-1029", "Pasareti ut 101.");
 
         createPartnerCommand1 = new CreatePartnerCommand("Anthony Company ltd.", address, "123456789");
-        tuple1 = tuple("P-1", "Anthony Company ltd.", address, "123456789");
+        tuple1 = tuple("P-1", "Anthony Company ltd.", addressDTO, "123456789");
 
         createPartnerCommand2 = new CreatePartnerCommand("Doerr Company ltd.", address, "987654321");
-        tuple2 = tuple("P-2", "Doerr Company ltd.", address, "987654321");
+        tuple2 = tuple("P-2", "Doerr Company ltd.", addressDTO, "987654321");
 
     }
 

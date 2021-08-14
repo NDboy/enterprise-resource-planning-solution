@@ -1,8 +1,11 @@
 package erp.acounting;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import erp.apinvoice.APInvoice;
+import erp.apinvoice.APInvoiceDTO;
 import erp.apinvoice.InvoiceStatus;
 import erp.employee.Employee;
+import erp.employee.EmployeeDTO;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -16,11 +19,11 @@ public class AccountingDTO {
 
     private LocalDate accountingDate;
 
-    private Employee employee;
+    private EmployeeDTO employee;
 
     private InvoiceStatus invoiceStatus;
 
-    private APInvoice apInvoice;
+    private APInvoiceDTO apInvoice;
 
     public String getId() {
         return id;
@@ -38,14 +41,6 @@ public class AccountingDTO {
         this.accountingDate = accountingDate;
     }
 
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
     public InvoiceStatus getInvoiceStatus() {
         return invoiceStatus;
     }
@@ -54,11 +49,19 @@ public class AccountingDTO {
         this.invoiceStatus = invoiceStatus;
     }
 
-    public APInvoice getApInvoice() {
+    public EmployeeDTO getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(EmployeeDTO employee) {
+        this.employee = employee;
+    }
+
+    public APInvoiceDTO getApInvoice() {
         return apInvoice;
     }
 
-    public void setApInvoice(APInvoice apInvoice) {
+    public void setApInvoice(APInvoiceDTO apInvoice) {
         this.apInvoice = apInvoice;
     }
 }

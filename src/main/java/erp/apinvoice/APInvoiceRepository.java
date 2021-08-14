@@ -42,23 +42,6 @@ public interface APInvoiceRepository extends JpaRepository<APInvoice, String> {
 
 
 
-//    List<APInvoice> findByInvNumEqualsIgnoreCase(@NonNull String invNum);
-
-//    List<APInvoice> findByPaymentModeAndDates_PaymentModeEquals(@NonNull PaymentMode paymentMode);
-
-//    List<APInvoice> findByPaymentModeAndDates_DueDateIsBefore(@NonNull LocalDate dueDate);
-//    List<APInvoice> findByPartner_IdEqualsIgnoreCase(@NonNull String id);
-//
-//    List<APInvoice> findByEmployee_IdEqualsIgnoreCase(@NonNull String id);
-//
-
-//    List<APInvoice> findByInvoiceStatusEquals(@NonNull InvoiceStatus invoiceStatus);
-
-
-
-
-
-
 
 
 

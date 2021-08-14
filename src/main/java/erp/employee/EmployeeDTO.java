@@ -1,6 +1,7 @@
 package erp.employee;
 
 import erp.Address;
+import erp.AddressDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ public class EmployeeDTO {
 
     private EmployeeStatus status;
 
-    private Address address;
+    private AddressDTO address;
 
     private LocalDate entryDate;
 
@@ -55,11 +56,12 @@ public class EmployeeDTO {
         this.status = status;
     }
 
-    public Address getAddress() {
+
+    public AddressDTO getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressDTO address) {
         this.address = address;
     }
 

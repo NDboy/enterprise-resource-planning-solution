@@ -47,6 +47,34 @@ public class APInvoiceService {
         return modelMapper.map(apInvoice, APInvoiceDTO.class);
     }
 
+    public APInvoiceDTO createAPInvoiceWithPartnerAndEmployeeId(CreateAPInvoiceWithPartnerAndEmployeeIdCommand command) {
+        List<InvoiceItem> invoiceItems = command.getInvoiceItems()
+                .stream()
+                .map(ii -> new InvoiceItem(ii.getItemName(), ii.getNetPrice(), ii.getVatRate()))
+                .collect(Collectors.toList());
+        APInvoice apInvoice = new APInvoice(command.getInvNum(), command.getPaymentModeAndDates(), command.getInvoiceStatus(), invoiceItems);
+        Partner partner = null;
+        Employee employee = null;
+        if (command.getPartnerId() != null && !command.getPartnerId().isBlank()) {
+            partner = partnerRepository.findById(command.getPartnerId()).orElseThrow(() -> new PartnerNotFoundException(command.getPartnerId()));
+            apInvoice.setPartner(partner);
+        }
+        if (command.getEmployeeId() != null && !command.getEmployeeId().isBlank()) {
+            employee = employeeRepository.findById(command.getEmployeeId()).orElseThrow(() -> new EmployeeNotFoundException(command.getEmployeeId()));
+            apInvoice.setEmployee(employee);
+        }
+        apInvoiceRepository.save(apInvoice);
+
+        if (partner != null && employee != null) {
+            Accounting accounting = new Accounting(LocalDate.now(), employee, apInvoice.getInvoiceStatus(), apInvoice);
+            accountingService.createAccounting(accounting);
+        }
+
+        return modelMapper.map(apInvoice, APInvoiceDTO.class);
+
+
+    }
+
     public APInvoiceDTO findAPInvoiceById(String id) {
         APInvoice apInvoice = apInvoiceRepository.findById(id)
                 .orElseThrow(() -> new APInvoiceNotFoundException(id));
@@ -74,7 +102,6 @@ public class APInvoiceService {
         apInvoice.setEmployee(employee);
         Accounting accounting = new Accounting(LocalDate.now(), employee, apInvoice.getInvoiceStatus(), apInvoice);
         accountingService.createAccounting(accounting);
-//        apInvoice.addAccounting(accounting);
         return modelMapper.map(apInvoice, APInvoiceDTO.class);
     }
 
@@ -94,7 +121,6 @@ public class APInvoiceService {
         apInvoice.setEmployee(employee);
         Accounting accounting = new Accounting(LocalDate.now(), employee, command.getInvoiceStatus(), apInvoice);
         accountingService.createAccounting(accounting);
-//        apInvoice.addAccounting(accounting);
 
         return modelMapper.map(apInvoice, APInvoiceDTO.class);
     }

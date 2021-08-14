@@ -1,11 +1,11 @@
 package erp.apinvoice;
 
 import erp.Address;
+import erp.AddressDTO;
 import erp.employee.CreateEmployeeCommand;
 import erp.employee.EmployeeDTO;
 import erp.employee.EmployeeStatus;
 import erp.partner.CreatePartnerCommand;
-import erp.partner.Partner;
 import erp.partner.PartnerDTO;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         "delete from apinvoice_invoice_items",
         "delete from partners_ap_invoices",
         "delete from partner_ibans",
-        "delete from ap_invoices_accountings",
         "delete from ap_invoices",
         "delete from employees",
         "delete from partners"
@@ -44,6 +43,17 @@ public class APInvoiceControllerRestTemplateIT {
 
     private APInvoiceDTO apInvoiceDTO1;
     private APInvoiceDTO apInvoiceDTO2;
+    private APInvoiceDTO apInvoiceDTOWithoutPartnerAndEmployee1;
+    private APInvoiceDTO apInvoiceDTOWithoutPartnerAndEmployee2;
+
+
+    private PartnerDTO partnerDTO1;
+    private PartnerDTO partnerDTO2;
+    private PartnerDTO partnerDtoNoInvoice;
+
+    private EmployeeDTO employeeDTO1;
+    private EmployeeDTO employeeDTO2;
+
 
     private Tuple tuple1;
     private Tuple tuple2;
@@ -51,13 +61,30 @@ public class APInvoiceControllerRestTemplateIT {
     private final String[] PARAMETERS_FOR_TUPLE_NO_INVOICEITEMS =
             new String[] {"id", "invNum", "paymentModeAndDates", "invoiceStatus"};
 
-    private CreateAPInvoiceCommand createAPInvoiceCommand1;
-    private CreateAPInvoiceCommand createAPInvoiceCommand2;
+    private CreateAPInvoiceWithPartnerAndEmployeeIdCommand createAPInvoiceWithPartnerAndEmployeeIdCommand1;
+    private CreateAPInvoiceWithPartnerAndEmployeeIdCommand createAPInvoiceWithPartnerAndEmployeeIdCommand2;
 
-    private Address address;
+    private CreateAPInvoiceWithPartnerAndEmployeeIdCommand createAPInvoiceNoPE1;
+    private CreateAPInvoiceWithPartnerAndEmployeeIdCommand createAPInvoiceNoPE2;
+
 
     @BeforeEach
     void init() {
+        Address address = new Address("Hungary", "H-1029", "Pasareti ut 101.");
+//        AddressDTO addressDTO = new AddressDTO("Hungary", "H-1029", "Pasareti ut 101.");
+
+        partnerDTO1 = template.postForObject("/api/partners", new CreatePartnerCommand("Anthony ltd.", address, "1122334455"), PartnerDTO.class);
+        String partnerId1 = partnerDTO1.getId();
+        partnerDTO2 = template.postForObject("/api/partners", new CreatePartnerCommand("Jaguar ltd.", address, "9898712455"), PartnerDTO.class);
+        String partnerId2 = partnerDTO2.getId();
+        partnerDtoNoInvoice = template.postForObject("/api/partners", new CreatePartnerCommand("Attach Later ltd.", address, "9898712455"), PartnerDTO.class);
+
+
+        employeeDTO1 = template.postForObject("/api/employees", new CreateEmployeeCommand("Anthony", "Doerr", EmployeeStatus.ACTIVE, address, LocalDate.of(2021,8,1)), EmployeeDTO.class);
+        String employeeId1 = employeeDTO1.getId();
+        employeeDTO2 = template.postForObject("/api/employees", new CreateEmployeeCommand("Caleb", "Carr", EmployeeStatus.ACTIVE, address, LocalDate.of(2019,1,13)), EmployeeDTO.class);
+        String employeeId2 = employeeDTO2.getId();
+
         List<InvoiceItem> invoiceItems1 = List.of(
                 new InvoiceItem("Packaging", 500.0, 15),
                 new InvoiceItem("Delivering", 3200.0, 15),
@@ -65,38 +92,52 @@ public class APInvoiceControllerRestTemplateIT {
                 new InvoiceItem("UNIT-123", 15500.0, 15),
                 new InvoiceItem("UNIT-999", 77200.0, 15)
         );
-        createAPInvoiceCommand1
-                = new CreateAPInvoiceCommand("11111111",
-                        new PaymentModeAndDates(PaymentMode.BANK_TRANSFER, LocalDate.of(2021,8,5), LocalDate.of(2021,8,6)),
-                        InvoiceStatus.OPEN,
-                        invoiceItems1);
+
+        createAPInvoiceNoPE1 = new CreateAPInvoiceWithPartnerAndEmployeeIdCommand("11111111",
+                new PaymentModeAndDates(PaymentMode.BANK_TRANSFER, LocalDate.of(2021, 8, 5), LocalDate.of(2021, 8, 6)),
+                InvoiceStatus.OPEN,
+                invoiceItems1);
+
+        createAPInvoiceWithPartnerAndEmployeeIdCommand1 = new CreateAPInvoiceWithPartnerAndEmployeeIdCommand("11111111",
+                new PaymentModeAndDates(PaymentMode.BANK_TRANSFER, LocalDate.of(2021, 8, 5), LocalDate.of(2021, 8, 6)),
+                InvoiceStatus.OPEN,
+                invoiceItems1,
+                partnerId1,
+                employeeId1);
 
         List<InvoiceItem> invoiceItems2 = List.of(
                 new InvoiceItem("Packaging", 500.0, 15),
                 new InvoiceItem("Delivering", 1200.0, 15),
                 new InvoiceItem("UNIT-123", 15500.0, 15)
         );
-        createAPInvoiceCommand2
-                = new CreateAPInvoiceCommand("22222222",
-                        new PaymentModeAndDates(PaymentMode.BANK_TRANSFER, LocalDate.of(2021,8,1), LocalDate.of(2021,8,30)),
-                        InvoiceStatus.OPEN,
-                        invoiceItems2);
 
-        apInvoiceDTO1 = template.postForObject("/api/apinvoices", createAPInvoiceCommand1, APInvoiceDTO.class);
-        apInvoiceDTO2 = template.postForObject("/api/apinvoices", createAPInvoiceCommand2, APInvoiceDTO.class);
+        createAPInvoiceNoPE2 = new CreateAPInvoiceWithPartnerAndEmployeeIdCommand("22222222",
+                new PaymentModeAndDates(PaymentMode.BANK_TRANSFER, LocalDate.of(2021, 8, 1), LocalDate.of(2021, 8, 30)),
+                InvoiceStatus.OPEN,
+                invoiceItems2);
+
+        createAPInvoiceWithPartnerAndEmployeeIdCommand2 = new CreateAPInvoiceWithPartnerAndEmployeeIdCommand("22222222",
+                new PaymentModeAndDates(PaymentMode.CASH, LocalDate.of(2021, 8, 1), LocalDate.of(2021, 8, 30)),
+                InvoiceStatus.PAYED,
+                invoiceItems2,
+                partnerId2,
+                employeeId2);
+
+        apInvoiceDTO1 = template.postForObject("/api/apinvoices", createAPInvoiceWithPartnerAndEmployeeIdCommand1, APInvoiceDTO.class);
+        apInvoiceDTO2 = template.postForObject("/api/apinvoices", createAPInvoiceWithPartnerAndEmployeeIdCommand2, APInvoiceDTO.class);
+
 
         tuple1 = tuple("E21-1",
                         "11111111",
-                        new PaymentModeAndDates(PaymentMode.BANK_TRANSFER, LocalDate.of(2021,8,5), LocalDate.of(2021,8,6)),
+                        new PaymentModeAndDatesDTO(PaymentMode.BANK_TRANSFER, LocalDate.of(2021,8,5), LocalDate.of(2021,8,6)),
                         InvoiceStatus.OPEN);
 
         tuple2 = tuple("E21-2",
                         "22222222",
-                        new PaymentModeAndDates(PaymentMode.BANK_TRANSFER, LocalDate.of(2021,8,1), LocalDate.of(2021,8,30)),
-                        InvoiceStatus.OPEN);
+                        new PaymentModeAndDatesDTO(PaymentMode.CASH, LocalDate.of(2021,8,1), LocalDate.of(2021,8,30)),
+                        InvoiceStatus.PAYED);
 
 
-        address = new Address("Hungary", "H-1029", "Pasareti ut 101.");
 
     }
 
@@ -120,72 +161,63 @@ public class APInvoiceControllerRestTemplateIT {
 
     @Test
     void testFindInvoiceByIdAndAddPartner() {
-        String invoiceId1 = apInvoiceDTO1.getId();
-        String invoiceId2 = apInvoiceDTO2.getId();
-        PartnerDTO partnerDTO = template.postForObject("/api/partners", new CreatePartnerCommand("Anthony ltd.", address, "1122334455"), PartnerDTO.class);
-        String partnerId = partnerDTO.getId();
+        APInvoiceDTO apInvoiceDTO3 = template.postForObject("/api/apinvoices", createAPInvoiceNoPE1, APInvoiceDTO.class);
+        APInvoiceDTO apInvoiceDTO4 = template.postForObject("/api/apinvoices", createAPInvoiceNoPE2, APInvoiceDTO.class);
+        String invoiceId3 = apInvoiceDTO3.getId();
+        String invoiceId4 = apInvoiceDTO4.getId();
 
-        template.put("/api/apinvoices/" + invoiceId1 + "/partner", new AddNewPartnerCommand(partnerId));
-        template.put("/api/apinvoices/" + invoiceId2 + "/partner", new AddNewPartnerCommand(partnerId));
+        String partnerId = partnerDtoNoInvoice.getId();
 
-        List<APInvoiceDTO> apInvoiceDTOsWithPartner = template.exchange("/api/apinvoices",
+        template.put("/api/apinvoices/" + invoiceId3 + "/partner", new AddNewPartnerCommand(partnerId));
+        template.put("/api/apinvoices/" + invoiceId4 + "/partner", new AddNewPartnerCommand(partnerId));
+
+        List<APInvoiceDTO> apInvoiceDTOsWithPartner = template.exchange("/api/apinvoices?partnerId=" + partnerId,
                         HttpMethod.GET,
                         null,
                         new ParameterizedTypeReference<List<APInvoiceDTO>>(){}).getBody();
 
         assertThat(apInvoiceDTOsWithPartner)
                 .hasSize(2)
-                .extracting("partner")
-                .extracting("id")
-                .containsExactly("P-1", "P-1");
+                .extracting(APInvoiceDTO::getId)
+                .containsExactly(invoiceId3, invoiceId4);
     }
 
-//    @Test
-//    void testFindInvoiceByPartnerId() {
-//        String invoiceId1 = apInvoiceDTO1.getId();
-//        String invoiceId2 = apInvoiceDTO2.getId();
-//        PartnerDTO partnerDTO = template.postForObject("/api/partners", new CreatePartnerCommand("Anthony ltd.", address, "1122334455"), PartnerDTO.class);
-//
-//        String partnerId = partnerDTO.getId();
-//
-//        template.put("/api/apinvoices/" + invoiceId1 + "/partner", new AddNewPartnerCommand(partnerId));
-//        template.put("/api/apinvoices/" + invoiceId2 + "/partner", new AddNewPartnerCommand(partnerId));
-//
-//        List<APInvoiceDTO> apInvoiceDTOsWithPartner = template.exchange("/api/apinvoices?partnerId=" + partnerId,
-//                        HttpMethod.GET,
-//                        null,
-//                        new ParameterizedTypeReference<List<APInvoiceDTO>>(){}).getBody();
-//
-//        assertThat(apInvoiceDTOsWithPartner)
-//                .hasSize(2)
-//                .extracting("id")
-//                .containsExactly("E21-1", "E21-2");
-//    }
+    @Test
+    void testFindInvoiceByPartnerId() {
+        String invoiceId1 = apInvoiceDTO1.getId();
+        String partnerId = partnerDTO1.getId();
+
+        List<APInvoiceDTO> apInvoiceDTOsWithPartner = template.exchange("/api/apinvoices?partnerId=" + partnerId,
+                        HttpMethod.GET,
+                        null,
+                        new ParameterizedTypeReference<List<APInvoiceDTO>>(){}).getBody();
+
+        assertThat(apInvoiceDTOsWithPartner)
+                .hasSize(1)
+                .extracting(APInvoiceDTO::getId)
+                .containsExactly(invoiceId1);
+    }
 
     @Test
     void testChangeInvoiceStatusAndFilterByInvoiceStatus() {
         String invoiceId1 = apInvoiceDTO1.getId();
-        String invoiceId2 = apInvoiceDTO2.getId();
-
-        PartnerDTO partnerDTO = template.postForObject("/api/partners", new CreatePartnerCommand("Anthony ltd.", address, "1122334455"), PartnerDTO.class);
-        String partnerId = partnerDTO.getId();
-
-        EmployeeDTO employeeDTO = template.postForObject("/api/employees", new CreateEmployeeCommand("Anthony", "Doerr", EmployeeStatus.ACTIVE, address, LocalDate.of(2021,8,1)), EmployeeDTO.class);
-        String employeeId = employeeDTO.getId();
-
-        template.put("/api/apinvoices/" + invoiceId1 + "/partner", new AddNewPartnerCommand(partnerId));
-        template.put("/api/apinvoices/" + invoiceId2 + "/partner", new AddNewPartnerCommand(partnerId));
-
-        template.put("/api/apinvoices/" + invoiceId1 + "/employee", new AddNewEmployeeCommand(employeeId));
-        template.put("/api/apinvoices/" + invoiceId2 + "/employee", new AddNewEmployeeCommand(employeeId));
+        String employeeId2 = employeeDTO2.getId();
 
         template.put("/api/apinvoices/" + invoiceId1 + "/invoicestatus",
-                new ChangeInvoiceStatusCommand(InvoiceStatus.PAYED, employeeId));
+                new ChangeInvoiceStatusCommand(InvoiceStatus.CANCELED, employeeId2));
 
-        String payed = InvoiceStatus.PAYED.toString();
-        String open = InvoiceStatus.OPEN.toString();
+        List<APInvoiceDTO> apInvoiceDTOsCanceled = template.exchange("/api/apinvoices/invoicestatus?invoiceStatus=" + InvoiceStatus.CANCELED,
+                        HttpMethod.GET,
+                        null,
+                        new ParameterizedTypeReference<List<APInvoiceDTO>>(){})
+                .getBody();
 
-        List<APInvoiceDTO> apInvoiceDTOsPayed = template.exchange("/api/apinvoices/invoicestatus?invoiceStatus=" + payed,
+        assertThat(apInvoiceDTOsCanceled)
+                .hasSize(1)
+                .extracting(APInvoiceDTO::getInvoiceStatus)
+                .containsExactly(InvoiceStatus.CANCELED);
+
+        List<APInvoiceDTO> apInvoiceDTOsPayed = template.exchange("/api/apinvoices/invoicestatus?invoiceStatus=" + InvoiceStatus.PAYED,
                         HttpMethod.GET,
                         null,
                         new ParameterizedTypeReference<List<APInvoiceDTO>>(){})
@@ -193,19 +225,8 @@ public class APInvoiceControllerRestTemplateIT {
 
         assertThat(apInvoiceDTOsPayed)
                 .hasSize(1)
-                .extracting("invoiceStatus")
+                .extracting(APInvoiceDTO::getInvoiceStatus)
                 .containsExactly(InvoiceStatus.PAYED);
-
-        List<APInvoiceDTO> apInvoiceDTOsOpen = template.exchange("/api/apinvoices/invoicestatus?invoiceStatus=" + open,
-                        HttpMethod.GET,
-                        null,
-                        new ParameterizedTypeReference<List<APInvoiceDTO>>(){})
-                .getBody();
-
-        assertThat(apInvoiceDTOsOpen)
-                .hasSize(1)
-                .extracting("invoiceStatus")
-                .containsExactly(InvoiceStatus.OPEN);
     }
 
     @Test

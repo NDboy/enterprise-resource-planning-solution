@@ -1,9 +1,8 @@
 package erp.apinvoice;
 
-import erp.employee.Employee;
-import erp.partner.Partner;
+import erp.employee.EmployeeDTO;
+import erp.partner.PartnerDTO;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -16,15 +15,15 @@ public class APInvoiceDTO {
 
     private String invNum;
 
-    private PaymentModeAndDates paymentModeAndDates;
+    private PaymentModeAndDatesDTO paymentModeAndDates;
 
-    private Partner partner;
+    private PartnerDTO partner;
 
     private InvoiceStatus invoiceStatus;
 
-    private List<InvoiceItem> invoiceItems;
+    private List<InvoiceItemDTO> invoiceItems;
 
-    private Employee employee;
+    private EmployeeDTO employee;
 
     public String getId() {
         return id;
@@ -42,20 +41,12 @@ public class APInvoiceDTO {
         this.invNum = invNum;
     }
 
-    public PaymentModeAndDates getPaymentModeAndDates() {
+    public PaymentModeAndDatesDTO getPaymentModeAndDates() {
         return paymentModeAndDates;
     }
 
-    public void setPaymentModeAndDates(PaymentModeAndDates paymentModeAndDates) {
+    public void setPaymentModeAndDates(PaymentModeAndDatesDTO paymentModeAndDates) {
         this.paymentModeAndDates = paymentModeAndDates;
-    }
-
-    public Partner getPartner() {
-        return partner;
-    }
-
-    public void setPartner(Partner partner) {
-        this.partner = partner;
     }
 
     public InvoiceStatus getInvoiceStatus() {
@@ -66,19 +57,27 @@ public class APInvoiceDTO {
         this.invoiceStatus = invoiceStatus;
     }
 
-    public List<InvoiceItem> getInvoiceItems() {
+    public List<InvoiceItemDTO> getInvoiceItems() {
         return invoiceItems;
     }
 
-    public void setInvoiceItems(List<InvoiceItem> invoiceItems) {
+    public void setInvoiceItems(List<InvoiceItemDTO> invoiceItems) {
         this.invoiceItems = invoiceItems;
     }
 
-    public Employee getEmployee() {
+    public PartnerDTO getPartner() {
+        return partner;
+    }
+
+    public void setPartner(PartnerDTO partner) {
+        this.partner = partner;
+    }
+
+    public EmployeeDTO getEmployee() {
         return employee;
     }
 
-    public void setEmployee(Employee employee) {
+    public void setEmployee(EmployeeDTO employee) {
         this.employee = employee;
     }
 }

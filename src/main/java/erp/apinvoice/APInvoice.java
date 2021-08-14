@@ -9,7 +9,6 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -42,7 +41,7 @@ public class APInvoice {
     @OneToOne
     private Employee employee;
 
-    @OneToMany
+    @OneToMany/*(mappedBy = "apInvoice")*/
     private List<Accounting> accountings;
 
     public APInvoice(String invNum, PaymentModeAndDates paymentModeAndDates, InvoiceStatus invoiceStatus, List<InvoiceItem> invoiceItems) {
@@ -50,6 +49,15 @@ public class APInvoice {
         this.paymentModeAndDates = paymentModeAndDates;
         this.invoiceStatus = invoiceStatus;
         this.invoiceItems = invoiceItems;
+    }
+
+    public APInvoice(String invNum, PaymentModeAndDates paymentModeAndDates, Partner partner, InvoiceStatus invoiceStatus, List<InvoiceItem> invoiceItems, Employee employee) {
+        this.invNum = invNum;
+        this.paymentModeAndDates = paymentModeAndDates;
+        this.partner = partner;
+        this.invoiceStatus = invoiceStatus;
+        this.invoiceItems = invoiceItems;
+        this.employee = employee;
     }
 
     public String getId() {

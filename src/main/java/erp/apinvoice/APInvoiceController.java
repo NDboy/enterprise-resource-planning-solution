@@ -19,12 +19,20 @@ public class APInvoiceController {
 
     APInvoiceService apInvoiceService;
 
+//    @PostMapping
+//    @ResponseStatus(HttpStatus.CREATED)
+//    @Operation(summary = "create an A/P invoice", description = "create an A/P invoice")
+//    public APInvoiceDTO createAPInvoice(@Valid @RequestBody CreateAPInvoiceCommand command) {
+//        return apInvoiceService.createAPInvoice(command);
+//    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "create an A/P invoice", description = "create an A/P invoice")
-    public APInvoiceDTO createAPInvoice(@Valid @RequestBody CreateAPInvoiceCommand command) {
-        return apInvoiceService.createAPInvoice(command);
+    @Operation(summary = "create an A/P invoice with existing Partner and Employee id", description = "create an A/P invoice with existing Partner and Employee id")
+    public APInvoiceDTO createAPInvoiceWithPartnerAndEmployeeId(@Valid @RequestBody CreateAPInvoiceWithPartnerAndEmployeeIdCommand command) {
+        return apInvoiceService.createAPInvoiceWithPartnerAndEmployeeId(command);
     }
+
 
     @GetMapping
     @Operation(summary = "filter invoices by different parameters, \n" +

@@ -1,7 +1,9 @@
 package erp.partner;
 
 import erp.Address;
+import erp.AddressDTO;
 import erp.apinvoice.APInvoice;
+import erp.apinvoice.APInvoiceDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,13 +19,13 @@ public class PartnerDTO {
 
     private String name;
 
-    private Address address;
+    private AddressDTO address;
 
     private String taxNo;
 
     private Set<String> ibans;
 
-    private List<APInvoice> apInvoices;
+    private List<APInvoiceDTO> apInvoices;
 
     public String getId() {
         return id;
@@ -41,11 +43,11 @@ public class PartnerDTO {
         this.name = name;
     }
 
-    public Address getAddress() {
+    public AddressDTO getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressDTO address) {
         this.address = address;
     }
 
@@ -65,11 +67,11 @@ public class PartnerDTO {
         this.ibans = ibans;
     }
 
-    public List<APInvoice> getApInvoices() {
+    public List<APInvoiceDTO> getApInvoices() {
         return apInvoices;
     }
 
-    public void setApInvoices(List<APInvoice> apInvoices) {
+    public void setApInvoices(List<APInvoiceDTO> apInvoices) {
         this.apInvoices = apInvoices;
     }
 }

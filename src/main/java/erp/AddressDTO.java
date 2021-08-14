@@ -1,31 +1,19 @@
 package erp;
 
-
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Embeddable;
-import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
-@Embeddable
 @AllArgsConstructor
 @NoArgsConstructor
-public class Address {
+public class AddressDTO {
 
-    @Schema(example = "Hungary")
     public String country;
 
-
-    @Schema(example = "H-1026")
     public String zipCode;
 
-
-    @Schema(example = "Pasareti ut 101.")
     public String line;
-
 
     public String getCountry() {
         return country;
@@ -52,16 +40,11 @@ public class Address {
     }
 
     @Override
-    public String toString() {
-        return country + " " + zipCode + " " + line;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Address address = (Address) o;
-        return Objects.equals(country, address.country) && Objects.equals(zipCode, address.zipCode) && Objects.equals(line, address.line);
+        AddressDTO that = (AddressDTO) o;
+        return Objects.equals(country, that.country) && Objects.equals(zipCode, that.zipCode) && Objects.equals(line, that.line);
     }
 
     @Override
