@@ -1,7 +1,6 @@
 package erp.apinvoice;
 
 import erp.Address;
-import erp.AddressDTO;
 import erp.employee.CreateEmployeeCommand;
 import erp.employee.EmployeeDTO;
 import erp.employee.EmployeeStatus;
@@ -43,8 +42,6 @@ public class APInvoiceControllerRestTemplateIT {
 
     private APInvoiceDTO apInvoiceDTO1;
     private APInvoiceDTO apInvoiceDTO2;
-    private APInvoiceDTO apInvoiceDTOWithoutPartnerAndEmployee1;
-    private APInvoiceDTO apInvoiceDTOWithoutPartnerAndEmployee2;
 
 
     private PartnerDTO partnerDTO1;
@@ -62,17 +59,13 @@ public class APInvoiceControllerRestTemplateIT {
     private final String[] PARAMETERS_FOR_TUPLE_NO_INVOICEITEMS =
             new String[] {"id", "invNum", "paymentModeAndDates", "invoiceStatus"};
 
-    private CreateAPInvoiceWithPartnerAndEmployeeIdCommand createAPInvoiceWithPartnerAndEmployeeIdCommand1;
-    private CreateAPInvoiceWithPartnerAndEmployeeIdCommand createAPInvoiceWithPartnerAndEmployeeIdCommand2;
-
-    private CreateAPInvoiceWithPartnerAndEmployeeIdCommand createAPInvoiceNoPE1;
-    private CreateAPInvoiceWithPartnerAndEmployeeIdCommand createAPInvoiceNoPE2;
+    private CreateAPInvoiceCommand createAPInvoiceNoPE1;
+    private CreateAPInvoiceCommand createAPInvoiceNoPE2;
 
 
     @BeforeEach
     void init() {
         Address address = new Address("Hungary", "H-1029", "Pasareti ut 101.");
-//        AddressDTO addressDTO = new AddressDTO("Hungary", "H-1029", "Pasareti ut 101.");
 
         partnerDTO1 = template.postForObject("/api/partners", new CreatePartnerCommand("Anthony ltd.", address, "1122334455"), PartnerDTO.class);
         String partnerId1 = partnerDTO1.getId();
@@ -95,12 +88,12 @@ public class APInvoiceControllerRestTemplateIT {
                 new InvoiceItem("UNIT-999", 77200.0, 15)
         );
 
-        createAPInvoiceNoPE1 = new CreateAPInvoiceWithPartnerAndEmployeeIdCommand("11111111",
+        createAPInvoiceNoPE1 = new CreateAPInvoiceCommand("11111111",
                 new PaymentModeAndDates(PaymentMode.BANK_TRANSFER, LocalDate.of(2021, 8, 5), LocalDate.of(2021, 8, 6)),
                 InvoiceStatus.OPEN,
                 invoiceItems1);
 
-        createAPInvoiceWithPartnerAndEmployeeIdCommand1 = new CreateAPInvoiceWithPartnerAndEmployeeIdCommand("11111111",
+        CreateAPInvoiceWithPartnerAndEmployeeIdCommand createAPInvoiceWithPartnerAndEmployeeIdCommand1 = new CreateAPInvoiceWithPartnerAndEmployeeIdCommand("11111111",
                 new PaymentModeAndDates(PaymentMode.BANK_TRANSFER, LocalDate.of(2021, 8, 5), LocalDate.of(2021, 8, 6)),
                 InvoiceStatus.OPEN,
                 invoiceItems1,
@@ -113,12 +106,12 @@ public class APInvoiceControllerRestTemplateIT {
                 new InvoiceItem("UNIT-123", 15500.0, 15)
         );
 
-        createAPInvoiceNoPE2 = new CreateAPInvoiceWithPartnerAndEmployeeIdCommand("22222222",
+        createAPInvoiceNoPE2 = new CreateAPInvoiceCommand("22222222",
                 new PaymentModeAndDates(PaymentMode.BANK_TRANSFER, LocalDate.of(2021, 8, 1), LocalDate.of(2021, 8, 30)),
                 InvoiceStatus.OPEN,
                 invoiceItems2);
 
-        createAPInvoiceWithPartnerAndEmployeeIdCommand2 = new CreateAPInvoiceWithPartnerAndEmployeeIdCommand("22222222",
+        CreateAPInvoiceWithPartnerAndEmployeeIdCommand createAPInvoiceWithPartnerAndEmployeeIdCommand2 = new CreateAPInvoiceWithPartnerAndEmployeeIdCommand("22222222",
                 new PaymentModeAndDates(PaymentMode.CASH, LocalDate.of(2021, 8, 1), LocalDate.of(2021, 8, 30)),
                 InvoiceStatus.PAYED,
                 invoiceItems2,
@@ -138,9 +131,6 @@ public class APInvoiceControllerRestTemplateIT {
                         "22222222",
                         new PaymentModeAndDatesDTO(PaymentMode.CASH, LocalDate.of(2021,8,1), LocalDate.of(2021,8,30)),
                         InvoiceStatus.PAYED);
-
-
-
     }
 
     @Test
@@ -318,7 +308,30 @@ public class APInvoiceControllerRestTemplateIT {
                 .hasSize(1)
                 .extracting(a -> a.getPaymentModeAndDates().getDueDate())
                 .contains(LocalDate.of(2021,8,6));
+    }
 
+    @Test
+    void testFindAPInvoiceByAccountingDateIsAfter() {
+        LocalDate earlierTestAccountingDate = LocalDate.now().minusDays(1);
+        LocalDate laterTestAccountingDate = LocalDate.now().plusDays(1);
+
+        List<APInvoiceDTO> apInvoiceDTOsFound1 = template.exchange("/api/apinvoices?accountingDate=" + earlierTestAccountingDate,
+                        HttpMethod.GET,
+                        null,
+                        new ParameterizedTypeReference<List<APInvoiceDTO>>(){})
+                .getBody();
+
+        assertThat(apInvoiceDTOsFound1)
+                .hasSize(2);
+
+        List<APInvoiceDTO> apInvoiceDTOsFound2 = template.exchange("/api/apinvoices?accountingDate=" + laterTestAccountingDate,
+                        HttpMethod.GET,
+                        null,
+                        new ParameterizedTypeReference<List<APInvoiceDTO>>(){})
+                .getBody();
+
+        assertThat(apInvoiceDTOsFound2)
+                .hasSize(0);
     }
 
     @Test
