@@ -1,6 +1,6 @@
 package erp.apinvoice;
 
-import erp.acounting.Accounting;
+import erp.accounting.Accounting;
 import erp.employee.Employee;
 import erp.partner.Partner;
 import lombok.AllArgsConstructor;
@@ -41,7 +41,7 @@ public class APInvoice {
     @OneToOne
     private Employee employee;
 
-    @OneToMany/*(mappedBy = "apInvoice")*/
+    @OneToMany(mappedBy = "apInvoice", orphanRemoval = true)
     private List<Accounting> accountings;
 
     public APInvoice(String invNum, PaymentModeAndDates paymentModeAndDates, InvoiceStatus invoiceStatus, List<InvoiceItem> invoiceItems) {
@@ -124,10 +124,5 @@ public class APInvoice {
         this.accountings = accountings;
     }
 
-//    public void addAccounting(Accounting accounting) {
-//        if (accountings == null) {
-//            accountings = new ArrayList<>();
-//        }
-//        accountings.add(accounting);
-//    }
+
 }
