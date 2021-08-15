@@ -1,12 +1,11 @@
 package erp.apinvoice;
 
 
-import erp.acounting.Accounting;
-import erp.acounting.AccountingService;
+import erp.accounting.Accounting;
+import erp.accounting.AccountingService;
 import erp.employee.Employee;
 import erp.employee.EmployeeNotFoundException;
 import erp.employee.EmployeeRepository;
-import erp.employee.EmployeeService;
 import erp.partner.Partner;
 import erp.partner.PartnerNotFoundException;
 import erp.partner.PartnerRepository;
@@ -37,15 +36,6 @@ public class APInvoiceService {
 
     private EmployeeRepository employeeRepository;
 
-    public APInvoiceDTO createAPInvoice(CreateAPInvoiceCommand command) {
-        List<InvoiceItem> invoiceItems = command.getInvoiceItems()
-                .stream()
-                .map(ii -> new InvoiceItem(ii.getItemName(), ii.getNetPrice(), ii.getVatRate()))
-                .collect(Collectors.toList());
-        APInvoice apInvoice = new APInvoice(command.getInvNum(), command.getPaymentModeAndDates(), command.getInvoiceStatus(), invoiceItems);
-        apInvoiceRepository.save(apInvoice);
-        return modelMapper.map(apInvoice, APInvoiceDTO.class);
-    }
 
     public APInvoiceDTO createAPInvoiceWithPartnerAndEmployeeId(CreateAPInvoiceWithPartnerAndEmployeeIdCommand command) {
         List<InvoiceItem> invoiceItems = command.getInvoiceItems()
@@ -71,7 +61,6 @@ public class APInvoiceService {
         }
 
         return modelMapper.map(apInvoice, APInvoiceDTO.class);
-
 
     }
 
@@ -103,12 +92,6 @@ public class APInvoiceService {
         Accounting accounting = new Accounting(LocalDate.now(), employee, apInvoice.getInvoiceStatus(), apInvoice);
         accountingService.createAccounting(accounting);
         return modelMapper.map(apInvoice, APInvoiceDTO.class);
-    }
-
-    public List<APInvoiceDTO> listAPInvoicesOrFilterByStatus(InvoiceStatus invoiceStatus) {
-        List<APInvoice> apInvoices = apInvoiceRepository.findAllByInvoiceStatus(invoiceStatus);
-        Type targetListType = new TypeToken<List<APInvoice>>() {}.getType();
-        return modelMapper.map(apInvoices, targetListType);
     }
 
     @Transactional
@@ -149,6 +132,10 @@ public class APInvoiceService {
             apInvoices = apInvoiceRepository.findByAccountingDateIsAfter(LocalDate.parse(params.get("accountingDate")));
         }
         return modelMapper.map(apInvoices, targetListType);
+    }
+
+    public void deleteAPInvoiceById(String id) {
+        apInvoiceRepository.deleteById(id);
     }
 }
 
