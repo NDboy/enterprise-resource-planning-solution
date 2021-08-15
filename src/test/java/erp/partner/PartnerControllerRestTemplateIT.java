@@ -170,7 +170,34 @@ public class PartnerControllerRestTemplateIT {
 
     }
 
+    @Test
+    void testDeletePartners() {
+        PartnerDTO partnerDTO1 = template.postForObject("/api/partners", createPartnerCommand1, PartnerDTO.class);
+        PartnerDTO partnerDTO2 = template.postForObject("/api/partners", createPartnerCommand2, PartnerDTO.class);
 
+        List<PartnerDTO> partnerDTOS = template.exchange("/api/partners",
+                        HttpMethod.GET,
+                        null,
+                        new ParameterizedTypeReference<List<PartnerDTO>>(){})
+                .getBody();
+
+        assertThat(partnerDTOS)
+                .hasSize(2)
+                .extracting(PARAMETERS_FOR_TUPLE_NO_IBANS)
+                .containsExactly(tuple1, tuple2);
+
+        template.delete("/api/partners/" + partnerDTO1.getId());
+        template.delete("/api/partners/" + partnerDTO2.getId());
+
+        partnerDTOS = template.exchange("/api/partners",
+                        HttpMethod.GET,
+                        null,
+                        new ParameterizedTypeReference<List<PartnerDTO>>(){})
+                .getBody();
+
+        assertThat(partnerDTOS)
+                .hasSize(0);
+    }
 
 
 

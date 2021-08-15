@@ -1,6 +1,7 @@
 package erp.partner;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -50,6 +51,13 @@ public class PartnerController {
             description = "find partner by iban")
     public PartnerDTO findPartnerByIban(@RequestParam String iban) {
         return partnerService.findPartnerByIban(iban);
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete Partner by id without APInvoice", description = "Delete Partner by id without APInvoice")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePartnerById(@Parameter(example = "P-1") @PathVariable("id") String id) {
+        partnerService.deletePartnerById(id);
     }
 
 

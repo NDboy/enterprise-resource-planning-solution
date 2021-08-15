@@ -57,4 +57,8 @@ public class PartnerService {
         Partner partner = partnerRepository.findPartnerByIbansIsContaining("%" + iban + "%");
         return modelMapper.map(partner, PartnerDTO.class);
     }
+
+    public void deletePartnerById(String id) {
+        partnerRepository.deleteById(id);
+    }
 }
