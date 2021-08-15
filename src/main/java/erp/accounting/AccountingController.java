@@ -1,4 +1,4 @@
-package erp.acounting;
+package erp.accounting;
 
 import erp.apinvoice.InvoiceStatus;
 import io.swagger.v3.oas.annotations.Operation;

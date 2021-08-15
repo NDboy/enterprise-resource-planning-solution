@@ -1,10 +1,9 @@
-package erp.acounting;
+package erp.accounting;
 
 import erp.apinvoice.APInvoice;
 import erp.apinvoice.InvoiceStatus;
 import erp.employee.Employee;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -34,7 +33,7 @@ public class Accounting {
     @Enumerated(value = EnumType.STRING)
     private InvoiceStatus invoiceStatus;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private APInvoice apInvoice;
 
     public Accounting(LocalDate accountingDate, Employee employee, InvoiceStatus invoiceStatus, APInvoice apInvoice) {

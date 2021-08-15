@@ -1,4 +1,4 @@
-package erp.acounting;
+package erp.accounting;
 
 import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;

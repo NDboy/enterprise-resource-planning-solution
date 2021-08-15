@@ -1,10 +1,7 @@
-package erp.acounting;
+package erp.accounting;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import erp.apinvoice.APInvoice;
 import erp.apinvoice.APInvoiceDTO;
 import erp.apinvoice.InvoiceStatus;
-import erp.employee.Employee;
 import erp.employee.EmployeeDTO;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,5 @@
-package erp.acounting;
+package erp.accounting;
 
-import erp.apinvoice.APInvoice;
-import erp.apinvoice.APInvoiceDTO;
 import erp.apinvoice.InvoiceStatus;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;

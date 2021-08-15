@@ -1,4 +1,4 @@
-package erp.acounting;
+package erp.accounting;
 
 import erp.apinvoice.InvoiceStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
