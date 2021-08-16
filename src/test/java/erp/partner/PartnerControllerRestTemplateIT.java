@@ -23,7 +23,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(statements = {"delete from partner_ibans", "delete from partners"})
+@Sql(statements = {
+        "delete from accountings",
+        "delete from apinvoice_invoice_items",
+        "delete from partner_ibans",
+        "delete from ap_invoices",
+        "delete from employees",
+        "delete from partners"
+})
 public class PartnerControllerRestTemplateIT {
 
     @Autowired
