@@ -19,6 +19,14 @@ public class PaymentModeAndDatesDTO {
 
     private LocalDate dueDate;
 
+    private double grossValue;
+
+    public PaymentModeAndDatesDTO(PaymentMode paymentMode, LocalDate invoicingDate, LocalDate dueDate) {
+        this.paymentMode = paymentMode;
+        this.invoicingDate = invoicingDate;
+        this.dueDate = dueDate;
+    }
+
     public PaymentMode getPaymentMode() {
         return paymentMode;
     }
@@ -41,6 +49,14 @@ public class PaymentModeAndDatesDTO {
 
     public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public double getGrossValue() {
+        return grossValue;
+    }
+
+    public void setGrossValue(double grossValue) {
+        this.grossValue = grossValue;
     }
 
     @Override
