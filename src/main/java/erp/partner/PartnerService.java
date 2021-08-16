@@ -1,12 +1,18 @@
 package erp.partner;
 
+import erp.apinvoice.APInvoice;
+import erp.apinvoice.APInvoiceDTO;
+import erp.apinvoice.PaymentMode;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -28,19 +34,6 @@ public class PartnerService {
         return partnerDTO;
     }
 
-
-    public List<PartnerDTO> listPartnersByName(Optional<String> name) {
-        List<Partner> partners;
-        if (name.isEmpty()) {
-            partners = partnerRepository.findAll();
-        } else {
-            partners = partnerRepository.findAllByNameLike("%" + name.get() + "%");
-        }
-        Type targetListType = new TypeToken<List<PartnerDTO>>() {}.getType();
-
-        return modelMapper.map(partners, targetListType);
-    }
-
     public PartnerDTO findPartnerById(String id) {
         Partner partner = partnerRepository.findById(id).orElseThrow(() -> new PartnerNotFoundException(id));
         return modelMapper.map(partner, PartnerDTO.class);
@@ -53,9 +46,22 @@ public class PartnerService {
         return modelMapper.map(partner, PartnerDTO.class);
     }
 
-    public PartnerDTO findPartnerByIban(String iban) {
-        Partner partner = partnerRepository.findPartnerByIbansIsContaining("%" + iban + "%");
-        return modelMapper.map(partner, PartnerDTO.class);
+//    nameLike, iban, taxNo
+    public List<PartnerDTO> listPartnersByDifferentParams(Map<String, String> params) {
+        List<Partner> partners = new ArrayList<>();
+        Type targetListType = new TypeToken<List<PartnerDTO>>() {}.getType();
+        if (params == null || params.isEmpty()) {
+            partners = partnerRepository.findAll();
+            return modelMapper.map(partners, targetListType);
+        }
+        if (params.containsKey("nameLike")) {
+            partners = partnerRepository.findAllByNameLike("%" + params.get("nameLike") + "%");
+        } else if (params.containsKey("iban")){
+            partners = partnerRepository.findPartnerByIbansIsContaining("%" + params.get("iban") + "%");
+        } else if (params.containsKey("taxNo")){
+            partners = partnerRepository.findAllByTaxNo(params.get("taxNo"));
+        }
+        return modelMapper.map(partners, targetListType);
     }
 
     public void deletePartnerById(String id) {

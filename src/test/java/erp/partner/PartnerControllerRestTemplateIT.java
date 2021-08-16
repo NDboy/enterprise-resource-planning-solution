@@ -77,7 +77,7 @@ public class PartnerControllerRestTemplateIT {
         String partOfCompanyName1 = partnerDTO1.getName().substring(1,4);
         String partOfCompanyName2 = partnerDTO2.getName().substring(1,4);
 
-        List<PartnerDTO> partnerDTOS = template.exchange("/api/partners?name=" + partOfCompanyName1,
+        List<PartnerDTO> partnerDTOS = template.exchange("/api/partners?nameLike=" + partOfCompanyName1,
                         HttpMethod.GET,
                         null,
                         new ParameterizedTypeReference<List<PartnerDTO>>(){})
@@ -88,7 +88,7 @@ public class PartnerControllerRestTemplateIT {
                 .extracting(PARAMETERS_FOR_TUPLE_NO_IBANS)
                 .containsExactly(tuple1);
 
-        List<PartnerDTO> partnerDTOS2 = template.exchange("/api/partners?name=" + partOfCompanyName2,
+        List<PartnerDTO> partnerDTOS2 = template.exchange("/api/partners?nameLike=" + partOfCompanyName2,
                         HttpMethod.GET,
                         null,
                         new ParameterizedTypeReference<List<PartnerDTO>>(){})
@@ -142,20 +142,43 @@ public class PartnerControllerRestTemplateIT {
     void testFindPartnerByIbanLike() {
         template.postForObject("/api/partners", createPartnerCommand1, PartnerDTO.class);
         PartnerDTO partnerDTO2 = template.postForObject("/api/partners", createPartnerCommand2, PartnerDTO.class);
-        String id = partnerDTO2.getId();
+        String partnerId2 = partnerDTO2.getId();
 
-        template.put("/api/partners/" + id + "/ibans", new AddIbanCommand("FR123456-12345678-12345678"));
-        template.put("/api/partners/" + id + "/ibans", new AddIbanCommand("FR654321-87654321-87654321"));
+        template.put("/api/partners/" + partnerId2 + "/ibans", new AddIbanCommand("FR123456-12345678-12345678"));
+        template.put("/api/partners/" + partnerId2 + "/ibans", new AddIbanCommand("FR654321-87654321-87654321"));
 
         String partOfIban = "FR654";
 
-        PartnerDTO resultDto = template.exchange("/api/partners/ibans?iban=" + partOfIban,
+        List<PartnerDTO> partnerDTOS = template.exchange("/api/partners?iban=" + partOfIban,
                         HttpMethod.GET,
                         null,
-                        PartnerDTO.class)
+                        new ParameterizedTypeReference<List<PartnerDTO>>(){})
                 .getBody();
 
-        assertEquals(id, resultDto.getId());
+        assertThat(partnerDTOS)
+                .hasSize(1)
+                .extracting(PARAMETERS_FOR_TUPLE_NO_IBANS)
+                .containsExactly(tuple2);
+
+    }
+
+    @Test
+    void testFindPartnerByTaxNo() {
+        template.postForObject("/api/partners", createPartnerCommand1, PartnerDTO.class);
+        template.postForObject("/api/partners", createPartnerCommand2, PartnerDTO.class);
+
+        String taxNo = "987654321";
+
+        List<PartnerDTO> partnerDTOS = template.exchange("/api/partners?taxNo=" + taxNo,
+                        HttpMethod.GET,
+                        null,
+                        new ParameterizedTypeReference<List<PartnerDTO>>(){})
+                .getBody();
+
+        assertThat(partnerDTOS)
+                .hasSize(1)
+                .extracting(PARAMETERS_FOR_TUPLE_NO_IBANS)
+                .containsExactly(tuple2);
     }
 
     @Test
