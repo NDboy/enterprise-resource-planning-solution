@@ -1,5 +1,6 @@
 package erp.accounting;
 
+import erp.apinvoice.APInvoiceDTO;
 import erp.apinvoice.InvoiceStatus;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -7,8 +8,11 @@ import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+
 
 @Service
 @AllArgsConstructor
@@ -29,22 +33,26 @@ public class AccountingService {
         return modelMapper.map(accounting, AccountingDTO.class);
     }
 
-    public List<AccountingDTO> listAccountingOrFilterByInvoiceId(Optional<String> invoiceid) {
-        List<Accounting> accountings;
-        if (invoiceid.isEmpty()) {
+
+//  accountingDate, employeeId, employeeLastName, invoiceStatus, apInvoiceId
+    public List<AccountingDTO> listAccountingOrFilterByDifferentParameters(Map<String, String> params) {
+        List<Accounting> accountings = new ArrayList<>();
+        Type targetListType = new TypeToken<List<AccountingDTO>>() {}.getType();
+        if (params == null || params.isEmpty()) {
             accountings = accountingRepository.findAll();
-        } else {
-            accountings = accountingRepository.findAllByApInvoiceId(invoiceid.get());
+            return modelMapper.map(accountings, targetListType);
         }
-        Type targetListType = new TypeToken<List<AccountingDTO>>() {}.getType();
+        if (params.containsKey("accountingDate")) {
+            accountings = accountingRepository.findAllByAccountingDate(LocalDate.parse(params.get("accountingDate")));
+        } else if (params.containsKey("employeeId")) {
+            accountings = accountingRepository.findAllByEmployeeId(params.get("employeeId"));
+        } else if (params.containsKey("employeeLastName")) {
+            accountings = accountingRepository.findAllByEmployeeLastName(params.get("employeeLastName"));
+        } else if (params.containsKey("invoiceStatus")) {
+            accountings = accountingRepository.findAllByInvoiceStatus(InvoiceStatus.valueOf(params.get("invoiceStatus")));
+        } else if (params.containsKey("apInvoiceId")) {
+            accountings = accountingRepository.findAllByApInvoiceId(params.get("apInvoiceId"));
+        }
         return modelMapper.map(accountings, targetListType);
     }
-
-    public List<AccountingDTO> listByInvoiceStatus(InvoiceStatus invoiceStatus) {
-        List<Accounting> accountings = accountingRepository.findAllByInvoiceStatus(invoiceStatus);
-        Type targetListType = new TypeToken<List<AccountingDTO>>() {}.getType();
-        return modelMapper.map(accountings, targetListType);
-    }
-
-
 }

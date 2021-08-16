@@ -1,12 +1,13 @@
 package erp.accounting;
 
-import erp.apinvoice.InvoiceStatus;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -24,16 +25,13 @@ public class AccountingController {
     }
 
     @GetMapping
-    @Operation(summary = "list all accountings or filter by A/P invoice id, (filtering syntax = /api/accountings?invoiceid=invoice id string)",
-            description = "list all accountings or filter by A/P invoice id")
-    public List<AccountingDTO> listAccountingOrFilterByInvoiceId(@RequestParam Optional<String> invoiceid) {
-        return accountingService.listAccountingOrFilterByInvoiceId(invoiceid);
+    @Operation(summary = "list all accountings or filter by different parameters: \n" +
+            "accountingDate, employeeId, employeeLastName, invoiceStatus, apInvoiceId\n (filtering syntax = /api/accountings?invoiceid=invoiceid string)",
+            description = "list all accountings or filter by different parameters: \n" +
+                    "accountingDate, employeeId, employeeLastName, invoiceStatus, apInvoiceId")
+    public List<AccountingDTO> listAccountingOrFilterByDifferentParameters(@RequestParam Map<String, String> params) {
+        return accountingService.listAccountingOrFilterByDifferentParameters(params);
     }
 
-    @GetMapping("/apinvoicestatus")
-    @Operation(summary = "Filter by A/P invoice status, (filtering syntax = /api/accountings/apinvoicestatus?invoicestatus=OPEN)",
-            description = "Filter by A/P invoice status")
-    public List<AccountingDTO> listByInvoiceStatus(@RequestParam InvoiceStatus invoiceStatus) {
-        return accountingService.listByInvoiceStatus(invoiceStatus);
-    }
+
 }
