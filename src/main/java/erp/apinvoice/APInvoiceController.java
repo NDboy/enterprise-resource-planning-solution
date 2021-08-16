@@ -49,18 +49,18 @@ public class APInvoiceController {
         return apInvoiceService.addNewPartner(id, command);
     }
 
-    @PutMapping("/{id}/invoicestatus")
-    @Operation(summary = "Find A/P invoice by id and change invoice status",
-            description = "Find A/P invoice by id and change invoice status")
-    public APInvoiceDTO changeInvoiceStatus(@PathVariable("id") String id, @RequestBody ChangeInvoiceStatusCommand command) {
-        return apInvoiceService.changeInvoiceStatus(id, command);
-    }
-
     @PutMapping("/{id}/employee")
     @Operation(summary = "Find A/P invoice by id and add new employee, putting an existing employee id, no need to fill other data",
             description = "Find A/P invoice by id and add new employee, putting an existing employee id, no need to fill other data")
     public APInvoiceDTO addEmployee(@PathVariable("id") String id, @RequestBody AddNewEmployeeCommand command) {
         return apInvoiceService.addNewEmployee(id, command);
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Find A/P invoice by id and change invoice status",
+            description = "Find A/P invoice by id and change invoice status")
+    public APInvoiceDTO changeInvoiceStatus(@PathVariable("id") String id, @RequestBody ChangeInvoiceStatusCommand command) {
+        return apInvoiceService.changeInvoiceStatus(id, command);
     }
 
     @DeleteMapping("/{id}")
