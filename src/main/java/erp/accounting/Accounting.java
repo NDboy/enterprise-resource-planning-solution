@@ -27,7 +27,7 @@ public class Accounting {
 
     private LocalDate accountingDate;
 
-    @OneToOne
+    @ManyToOne
     private Employee employee;
 
     @Enumerated(value = EnumType.STRING)

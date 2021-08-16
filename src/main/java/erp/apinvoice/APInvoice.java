@@ -29,7 +29,7 @@ public class APInvoice {
     @Embedded
     private PaymentModeAndDates paymentModeAndDates;
 
-    @ManyToOne()
+    @ManyToOne
     private Partner partner;
 
     @Enumerated(value = EnumType.STRING)
@@ -38,7 +38,7 @@ public class APInvoice {
     @ElementCollection
     private List<InvoiceItem> invoiceItems;
 
-    @OneToOne
+    @ManyToOne
     private Employee employee;
 
     @OneToMany(mappedBy = "apInvoice", orphanRemoval = true)

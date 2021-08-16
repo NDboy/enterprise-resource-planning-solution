@@ -1,14 +1,9 @@
 package erp.partner;
 
-import erp.Address;
 import erp.AddressDTO;
-import erp.apinvoice.APInvoice;
-import erp.apinvoice.APInvoiceDTO;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -24,8 +19,6 @@ public class PartnerDTO {
     private String taxNo;
 
     private Set<String> ibans;
-
-    private List<APInvoiceDTO> apInvoices;
 
     public String getId() {
         return id;
@@ -67,11 +60,5 @@ public class PartnerDTO {
         this.ibans = ibans;
     }
 
-    public List<APInvoiceDTO> getApInvoices() {
-        return apInvoices;
-    }
 
-    public void setApInvoices(List<APInvoiceDTO> apInvoices) {
-        this.apInvoices = apInvoices;
-    }
 }

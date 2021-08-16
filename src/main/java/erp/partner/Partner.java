@@ -40,7 +40,7 @@ public class Partner {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> ibans = new HashSet<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "partner")
     private List<APInvoice> apInvoices;
 
     public Partner(String name, Address address, String taxNo) {

@@ -1,12 +1,15 @@
 package erp.employee;
 
 import erp.Address;
+import erp.accounting.Accounting;
+import erp.apinvoice.APInvoice;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -30,6 +33,12 @@ public class Employee {
     private Address address;
 
     private LocalDate entryDate;
+
+    @OneToMany(mappedBy = "employee")
+    private List<APInvoice> apInvoices;
+
+    @OneToMany(mappedBy = "employee")
+    private List<Accounting> accountings;
 
     public Employee(String firstName, String lastName, EmployeeStatus status, Address address, LocalDate entryDate) {
         generateIdByName(firstName, lastName);
@@ -98,5 +107,19 @@ public class Employee {
         this.entryDate = entryDate;
     }
 
+    public List<APInvoice> getApInvoices() {
+        return apInvoices;
+    }
 
+    public void setApInvoices(List<APInvoice> apInvoices) {
+        this.apInvoices = apInvoices;
+    }
+
+    public List<Accounting> getAccountings() {
+        return accountings;
+    }
+
+    public void setAccountings(List<Accounting> accountings) {
+        this.accountings = accountings;
+    }
 }

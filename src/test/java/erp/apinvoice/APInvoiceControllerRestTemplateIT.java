@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Sql(statements = {
         "delete from accountings",
         "delete from apinvoice_invoice_items",
-        "delete from partners_ap_invoices",
         "delete from partner_ibans",
         "delete from ap_invoices",
         "delete from employees",

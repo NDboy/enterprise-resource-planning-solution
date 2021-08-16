@@ -27,7 +27,6 @@ import static org.assertj.core.api.Assertions.tuple;
 @Sql(statements = {
         "delete from accountings",
         "delete from apinvoice_invoice_items",
-        "delete from partners_ap_invoices",
         "delete from partner_ibans",
         "delete from ap_invoices",
         "delete from employees",
