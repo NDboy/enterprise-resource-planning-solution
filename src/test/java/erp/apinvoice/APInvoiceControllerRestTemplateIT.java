@@ -56,7 +56,7 @@ public class APInvoiceControllerRestTemplateIT {
     private Tuple tuple1;
     private Tuple tuple2;
 
-    private final String[] PARAMETERS_FOR_TUPLE_NO_INVOICEITEMS =
+    private final String[] PARAMETERS_FOR_TUPLE_NO_INVOICE_ITEMS =
             new String[] {"id", "invNum", "paymentModeAndDates", "invoiceStatus"};
 
     private CreateAPInvoiceCommand createAPInvoiceNoPE1;
@@ -144,7 +144,7 @@ public class APInvoiceControllerRestTemplateIT {
 
         assertThat(apInvoiceDTOS)
                 .hasSize(2)
-                .extracting(PARAMETERS_FOR_TUPLE_NO_INVOICEITEMS)
+                .extracting(PARAMETERS_FOR_TUPLE_NO_INVOICE_ITEMS)
                 .containsExactly(tuple1, tuple2);
 
         assertThat(apInvoiceDTOS.get(0).getInvoiceItems()).hasSize(5);
@@ -214,7 +214,7 @@ public class APInvoiceControllerRestTemplateIT {
         String invoiceId1 = apInvoiceDTO1.getId();
         String employeeId2 = employeeDTO2.getId();
 
-        template.put("/api/apinvoices/" + invoiceId1 + "/invoicestatus",
+        template.put("/api/apinvoices/" + invoiceId1,
                 new ChangeInvoiceStatusCommand(InvoiceStatus.CANCELED, employeeId2));
 
         List<APInvoiceDTO> apInvoiceDTOsCanceled = template.exchange("/api/apinvoices?invoiceStatus=" + InvoiceStatus.CANCELED,
