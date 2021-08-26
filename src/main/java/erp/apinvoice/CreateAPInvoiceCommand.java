@@ -2,6 +2,7 @@ package erp.apinvoice;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
@@ -12,6 +13,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class CreateAPInvoiceCommand {
 
     @NotBlank(message = "Invoice number cannot be null or blank")
@@ -30,35 +32,4 @@ public class CreateAPInvoiceCommand {
     @NotNull(message = "Invoice can not be created without items")
     private List<InvoiceItem> invoiceItems;
 
-    public String getInvNum() {
-        return invNum;
-    }
-
-    public void setInvNum(String invNum) {
-        this.invNum = invNum;
-    }
-
-    public PaymentModeAndDates getPaymentModeAndDates() {
-        return paymentModeAndDates;
-    }
-
-    public void setPaymentModeAndDates(PaymentModeAndDates paymentModeAndDates) {
-        this.paymentModeAndDates = paymentModeAndDates;
-    }
-
-    public InvoiceStatus getInvoiceStatus() {
-        return invoiceStatus;
-    }
-
-    public void setInvoiceStatus(InvoiceStatus invoiceStatus) {
-        this.invoiceStatus = invoiceStatus;
-    }
-
-    public List<InvoiceItem> getInvoiceItems() {
-        return invoiceItems;
-    }
-
-    public void setInvoiceItems(List<InvoiceItem> invoiceItems) {
-        this.invoiceItems = invoiceItems;
-    }
 }

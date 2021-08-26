@@ -1,6 +1,5 @@
 package erp.accounting;
 
-import erp.apinvoice.APInvoiceDTO;
 import erp.apinvoice.InvoiceStatus;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -34,7 +33,6 @@ public class AccountingService {
     }
 
 
-//  accountingDate, employeeId, employeeLastName, invoiceStatus, apInvoiceId
     public List<AccountingDTO> listAccountingOrFilterByDifferentParameters(Map<String, String> params) {
         List<Accounting> accountings = new ArrayList<>();
         Type targetListType = new TypeToken<List<AccountingDTO>>() {}.getType();

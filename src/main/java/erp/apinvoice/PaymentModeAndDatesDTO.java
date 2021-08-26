@@ -1,6 +1,7 @@
 package erp.apinvoice;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
@@ -10,6 +11,7 @@ import java.util.Objects;
 @Embeddable
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class PaymentModeAndDatesDTO {
 
 
@@ -25,38 +27,6 @@ public class PaymentModeAndDatesDTO {
         this.paymentMode = paymentMode;
         this.invoicingDate = invoicingDate;
         this.dueDate = dueDate;
-    }
-
-    public PaymentMode getPaymentMode() {
-        return paymentMode;
-    }
-
-    public void setPaymentMode(PaymentMode paymentMode) {
-        this.paymentMode = paymentMode;
-    }
-
-    public LocalDate getInvoicingDate() {
-        return invoicingDate;
-    }
-
-    public void setInvoicingDate(LocalDate invoicingDate) {
-        this.invoicingDate = invoicingDate;
-    }
-
-    public LocalDate getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(LocalDate dueDate) {
-        this.dueDate = dueDate;
-    }
-
-    public double getGrossValue() {
-        return grossValue;
-    }
-
-    public void setGrossValue(double grossValue) {
-        this.grossValue = grossValue;
     }
 
     @Override

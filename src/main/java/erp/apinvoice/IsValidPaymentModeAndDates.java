@@ -1,7 +1,5 @@
 package erp.apinvoice;
 
-import erp.AddressValidator;
-
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Retention;

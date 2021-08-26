@@ -1,7 +1,7 @@
 package erp.partner;
 
-import erp.Address;
-import erp.IsCompleteAddress;
+import erp.general.Address;
+import erp.general.IsCompleteAddress;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

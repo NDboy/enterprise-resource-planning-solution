@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
 @NoArgsConstructor
-//@Data
+@Data
 public class ChangeInvoiceStatusCommand {
 
     @NotNull(message = "OPEN, PAYED or CANCELED")
@@ -21,19 +21,4 @@ public class ChangeInvoiceStatusCommand {
     @Schema(example = "ado")
     private String employeeId;
 
-    public InvoiceStatus getInvoiceStatus() {
-        return invoiceStatus;
-    }
-
-    public void setInvoiceStatus(InvoiceStatus invoiceStatus) {
-        this.invoiceStatus = invoiceStatus;
-    }
-
-    public String getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
-    }
 }

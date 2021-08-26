@@ -1,6 +1,6 @@
 package erp.apinvoice;
 
-import erp.Address;
+import erp.general.Address;
 import erp.employee.CreateEmployeeCommand;
 import erp.employee.EmployeeDTO;
 import erp.employee.EmployeeStatus;

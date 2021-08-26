@@ -1,6 +1,6 @@
 package erp.partner;
 
-import erp.Address;
+import erp.general.Address;
 import erp.apinvoice.APInvoice;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class Partner {
     @GeneratedValue(generator = "partner-generator")
     @GenericGenerator(name = "partner-generator",
             parameters = @Parameter(name = "prefix", value = "P"),
-            strategy = "erp.MyIdGenerator")
+            strategy = "erp.general.MyIdGenerator")
     @Schema(example = "P-2")
     private String id;
 

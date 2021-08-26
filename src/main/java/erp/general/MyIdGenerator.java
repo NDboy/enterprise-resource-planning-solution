@@ -1,4 +1,4 @@
-package erp;
+package erp.general;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

@@ -1,10 +1,11 @@
 package erp.employee;
 
-import erp.Address;
+import erp.general.Address;
 import erp.accounting.Accounting;
 import erp.apinvoice.APInvoice;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "employees")
+@Data
 public class Employee {
 
     @Id
@@ -59,67 +61,4 @@ public class Employee {
         id = firstName.toLowerCase().substring(0,1) + lastName.toLowerCase().substring(0,2);
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public EmployeeStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(EmployeeStatus status) {
-        this.status = status;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public LocalDate getEntryDate() {
-        return entryDate;
-    }
-
-    public void setEntryDate(LocalDate entryDate) {
-        this.entryDate = entryDate;
-    }
-
-    public List<APInvoice> getApInvoices() {
-        return apInvoices;
-    }
-
-    public void setApInvoices(List<APInvoice> apInvoices) {
-        this.apInvoices = apInvoices;
-    }
-
-    public List<Accounting> getAccountings() {
-        return accountings;
-    }
-
-    public void setAccountings(List<Accounting> accountings) {
-        this.accountings = accountings;
-    }
 }

@@ -1,13 +1,11 @@
-package erp;
+package erp.general;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Embeddable;
-import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @Embeddable

@@ -1,9 +1,7 @@
 package erp.employee;
 
-import erp.Address;
-import erp.AddressDTO;
+import erp.general.AddressDTO;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;

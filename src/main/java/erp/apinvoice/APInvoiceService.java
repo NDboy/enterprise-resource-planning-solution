@@ -108,7 +108,7 @@ public class APInvoiceService {
         return modelMapper.map(apInvoice, APInvoiceDTO.class);
     }
 
-//    examples: invNum, paymentMode, dueDate is before, partnerId, employeeId, invoiceStatus, accountingDate is after
+
     public List<APInvoiceDTO> filterInvoicesByDifferentParams(Map<String, String> params) {
         List<APInvoice> apInvoices = new ArrayList<>();
         Type targetListType = new TypeToken<List<APInvoiceDTO>>() {}.getType();

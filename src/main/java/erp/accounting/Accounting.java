@@ -4,6 +4,7 @@ import erp.apinvoice.APInvoice;
 import erp.apinvoice.InvoiceStatus;
 import erp.employee.Employee;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -15,14 +16,14 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "accountings")
-//@Data
+@Data
 public class Accounting {
 
     @Id
     @GeneratedValue(generator = "accounting-id-generator")
     @GenericGenerator(name = "accounting-id-generator",
             parameters = @Parameter(name = "prefix", value = "ACC21"),
-            strategy = "erp.MyIdGenerator")
+            strategy = "erp.general.MyIdGenerator")
     private String id;
 
     private LocalDate accountingDate;
@@ -43,43 +44,4 @@ public class Accounting {
         this.apInvoice = apInvoice;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public LocalDate getAccountingDate() {
-        return accountingDate;
-    }
-
-    public void setAccountingDate(LocalDate accountingDate) {
-        this.accountingDate = accountingDate;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public InvoiceStatus getInvoiceStatus() {
-        return invoiceStatus;
-    }
-
-    public void setInvoiceStatus(InvoiceStatus invoiceStatus) {
-        this.invoiceStatus = invoiceStatus;
-    }
-
-    public APInvoice getApInvoice() {
-        return apInvoice;
-    }
-
-    public void setApInvoice(APInvoice apInvoice) {
-        this.apInvoice = apInvoice;
-    }
 }

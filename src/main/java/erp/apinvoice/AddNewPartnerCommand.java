@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
-//@Data
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddNewPartnerCommand {
@@ -16,11 +16,4 @@ public class AddNewPartnerCommand {
     @Schema(example = "P-1")
     private String partnerId;
 
-    public String getPartnerId() {
-        return partnerId;
-    }
-
-    public void setPartnerId(String partnerId) {
-        this.partnerId = partnerId;
-    }
 }

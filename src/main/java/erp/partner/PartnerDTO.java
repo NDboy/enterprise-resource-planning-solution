@@ -1,6 +1,6 @@
 package erp.partner;
 
-import erp.AddressDTO;
+import erp.general.AddressDTO;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
