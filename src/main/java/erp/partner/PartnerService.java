@@ -1,31 +1,23 @@
 package erp.partner;
 
-import erp.apinvoice.APInvoice;
-import erp.apinvoice.APInvoiceDTO;
-import erp.apinvoice.PaymentMode;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Type;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class PartnerService {
 
     private PartnerRepository partnerRepository;
 
     private ModelMapper modelMapper;
-
-    public PartnerService(PartnerRepository partnerRepository, ModelMapper modelMapper) {
-        this.partnerRepository = partnerRepository;
-        this.modelMapper = modelMapper;
-    }
 
     public PartnerDTO createPartner(CreatePartnerCommand command) {
         Partner partner = new Partner(command.getName(), command.getAddress(), command.getTaxNo());
@@ -46,7 +38,6 @@ public class PartnerService {
         return modelMapper.map(partner, PartnerDTO.class);
     }
 
-//    nameLike, iban, taxNo
     public List<PartnerDTO> listPartnersByDifferentParams(Map<String, String> params) {
         List<Partner> partners = new ArrayList<>();
         Type targetListType = new TypeToken<List<PartnerDTO>>() {}.getType();

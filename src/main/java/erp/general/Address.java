@@ -3,6 +3,7 @@ package erp.general;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
@@ -11,6 +12,7 @@ import java.util.Objects;
 @Embeddable
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class Address {
 
     @Schema(example = "Hungary")
@@ -24,30 +26,6 @@ public class Address {
     @Schema(example = "Pasareti ut 101.")
     public String line;
 
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
-
-    public String getLine() {
-        return line;
-    }
-
-    public void setLine(String line) {
-        this.line = line;
-    }
 
     @Override
     public String toString() {

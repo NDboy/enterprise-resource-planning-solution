@@ -4,6 +4,7 @@ import erp.general.Address;
 import erp.general.IsCompleteAddress;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
@@ -11,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class CreatePartnerCommand {
 
     @NotBlank(message = "Name cannot be null or blank")
@@ -25,30 +27,4 @@ public class CreatePartnerCommand {
     @Schema(example = "9235684972")
     private String taxNo;
 
-
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public String getTaxNo() {
-        return taxNo;
-    }
-
-    public void setTaxNo(String taxNo) {
-        this.taxNo = taxNo;
-    }
 }
