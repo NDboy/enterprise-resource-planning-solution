@@ -1,5 +1,6 @@
 package erp.employee;
 
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
@@ -10,18 +11,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class EmployeeService {
 
     private EmployeeRepository employeeRepository;
 
     private ModelMapper modelMapper;
-
-    public EmployeeService(EmployeeRepository employeeRepository, ModelMapper modelMapper) {
-        this.employeeRepository = employeeRepository;
-        this.modelMapper = modelMapper;
-    }
-
-
 
     public EmployeeDTO createEmployee(CreateEmployeeCommand command) {
         Employee employee = new Employee(command.getFirstName(), command.getLastName(), command.getStatus(), command.getAddress(), command.getEntryDate());
@@ -29,12 +24,6 @@ public class EmployeeService {
         EmployeeDTO employeeDTO = modelMapper.map(employee, EmployeeDTO.class);
         return employeeDTO;
     }
-
-//    public List<EmployeeDTO> listEmployees() {
-//        List<Employee> employees = employeeRepository.findAll();
-//        Type targetListType = new TypeToken<List<EmployeeDTO>>() {}.getType();
-//        return modelMapper.map(employees, targetListType);
-//    }
 
     public EmployeeDTO findEmployeeById(String id) {
         Employee employee = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
@@ -71,7 +60,6 @@ public class EmployeeService {
         }
         return modelMapper.map(employee, EmployeeDTO.class);
     }
-
 
 
 
