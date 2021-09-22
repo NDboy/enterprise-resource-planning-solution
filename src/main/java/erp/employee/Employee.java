@@ -8,11 +8,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -22,6 +24,8 @@ import java.util.Set;
 public class Employee {
 
     @Id
+    @GeneratedValue(generator = "employee-generator")
+    @GenericGenerator(name = "employee-generator", strategy = "erp.employee.EmployeeIdGenerator")
     private String id;
 
     @Schema(example = "Anthony")
@@ -45,7 +49,6 @@ public class Employee {
     private List<Accounting> accountings;
 
     public Employee(String firstName, String lastName, EmployeeStatus status, Address address, LocalDate entryDate) {
-        generateIdByName(firstName, lastName);
         this.firstName = firstName;
         this.lastName = lastName;
         this.status = status;
@@ -54,13 +57,8 @@ public class Employee {
     }
 
     public Employee(String firstName, String lastName) {
-        generateIdByName(firstName, lastName);
         this.firstName = firstName;
         this.lastName = lastName;
-    }
-
-    private void generateIdByName(String firstName, String lastName) {
-        id = firstName.toLowerCase().substring(0,1) + lastName.toLowerCase().substring(0,2);
     }
 
     public void update(UpdateEmployeeCommand command) {

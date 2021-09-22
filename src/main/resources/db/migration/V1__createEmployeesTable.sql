@@ -1,6 +1,6 @@
 create table employees
 (
-    id         varchar(4) not null,
+    id         varchar(9) not null,
     first_name varchar(30) not null,
     last_name  varchar(30) not null,
     status     varchar(10) not null,
