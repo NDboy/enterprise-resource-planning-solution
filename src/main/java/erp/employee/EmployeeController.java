@@ -1,5 +1,7 @@
 package erp.employee;
 
+import erp.employee.dto.UpdateEmployeeCommand;
+import erp.partner.dto.UpdatePartnerCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -10,6 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(exposedHeaders="Access-Control-Allow-Origin")
 @RestController
 @RequestMapping("/api/employees")
 @AllArgsConstructor
@@ -47,6 +50,14 @@ public class EmployeeController {
     @Operation(summary = "find employee by id and change the address", description = "find employee by id and change the address")
     public EmployeeDTO changeAddressById(@PathVariable("id") String id, @Valid @RequestBody UpdateAddressCommand command) {
         return employeeService.changeAddressById(id, command);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @Operation(summary = "find employee by id and update",
+            description = "find employee by id and update")
+    public EmployeeDTO updateEmployee(@PathVariable("id") String id, @Valid @RequestBody UpdateEmployeeCommand command) {
+        return employeeService.updateEmployee(id, command);
     }
 
 

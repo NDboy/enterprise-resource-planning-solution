@@ -1,5 +1,6 @@
 package erp.employee;
 
+import erp.employee.dto.UpdateEmployeeCommand;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -61,6 +62,10 @@ public class EmployeeService {
         return modelMapper.map(employee, EmployeeDTO.class);
     }
 
-
-
+    @Transactional
+    public EmployeeDTO updateEmployee(String id, UpdateEmployeeCommand command) {
+        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
+        employee.update(command);
+        return modelMapper.map(employee, EmployeeDTO.class);
+    }
 }

@@ -1,5 +1,6 @@
 package erp.partner;
 
+import erp.partner.dto.UpdatePartnerCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@CrossOrigin(exposedHeaders="Access-Control-Allow-Origin")
 @RestController
 @RequestMapping("/api/partners")
 @AllArgsConstructor
@@ -41,10 +43,19 @@ public class PartnerController {
     }
 
     @PutMapping("/{id}/ibans")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     @Operation(summary = "find partner by id and add new iban",
             description = "find partner by id and add new iban")
     public PartnerDTO addIban(@PathVariable("id") String id, @Valid @RequestBody AddIbanCommand command) {
         return partnerService.addIban(id, command);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @Operation(summary = "find partner by id and update",
+            description = "find partner by id and update")
+    public PartnerDTO updatePartner(@PathVariable("id") String id, @Valid @RequestBody UpdatePartnerCommand command) {
+        return partnerService.updatePartner(id, command);
     }
 
     @DeleteMapping("/{id}")

@@ -2,6 +2,7 @@ package erp.partner;
 
 import erp.general.Address;
 import erp.apinvoice.APInvoice;
+import erp.partner.dto.UpdatePartnerCommand;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -51,6 +52,13 @@ public class Partner {
         this.taxNo = taxNo;
     }
 
+    public Partner(String name, Address address, String taxNo, Set<String> ibans) {
+        this.name = name;
+        this.address = address;
+        this.taxNo = taxNo;
+        this.ibans = ibans;
+    }
+
     public void addIban(String iban) {
         if (ibans == null) {
             ibans = new HashSet<>();
@@ -58,4 +66,26 @@ public class Partner {
         ibans.add(iban);
     }
 
+    public void update(UpdatePartnerCommand command) {
+        String newName = command.getName();
+        Address newAddress = command.getAddress();
+        String newTaxNo = command.getTaxNo();
+        Set<String> newIbans = command.getIbans();
+        if (!empty(newName)) {
+            setName(newName);
+        }
+        if (newAddress != null) {
+            setAddress(newAddress);
+        }
+        if (!empty(newTaxNo)) {
+            setTaxNo(newTaxNo);
+        }
+        if (newIbans != null && !newIbans.isEmpty()) {
+            setIbans(newIbans);
+        }
+    }
+
+    private boolean empty(String s){
+        return s == null || s.isBlank();
+    }
 }
