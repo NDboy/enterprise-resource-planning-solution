@@ -37,7 +37,7 @@ public class MyIdGenerator implements IdentifierGenerator, Configurable {
                 .max()
                 .orElse(0L);
 
-        return prefix + "-" + (max + 1);
+        return String.format("%s-%05d", prefix, (max+1));
     }
 
     @Override
