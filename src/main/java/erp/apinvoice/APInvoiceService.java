@@ -116,21 +116,16 @@ public class APInvoiceService {
             apInvoices = apInvoiceRepository.findAll();
             return modelMapper.map(apInvoices, targetListType);
         }
-        if (params.containsKey("invNum")) {
-            apInvoices = apInvoiceRepository.findByInvNumEqualsIgnoreCase(params.get("invNum"));
-        } else if (params.containsKey("paymentMode")){
-            apInvoices = apInvoiceRepository.findByPaymentMode(PaymentMode.valueOf(params.get("paymentMode")));
-        } else if (params.containsKey("dueDate")){
-            apInvoices = apInvoiceRepository.findByDueDateIsBefore(LocalDate.parse(params.get("dueDate")));
-        } else if (params.containsKey("partnerId")){
-            apInvoices = apInvoiceRepository.findByPartnerId(params.get("partnerId"));
-        } else if (params.containsKey("employeeId")){
-            apInvoices = apInvoiceRepository.findByEmployeeId(params.get("employeeId"));
-        } else if (params.containsKey("invoiceStatus")){
-            apInvoices = apInvoiceRepository.findAllByInvoiceStatus(InvoiceStatus.valueOf(params.get("invoiceStatus")));
-        } else if (params.containsKey("accountingDate")){
-            apInvoices = apInvoiceRepository.findByAccountingDateIsAfter(LocalDate.parse(params.get("accountingDate")));
-        }
+        apInvoices = switch (params.keySet().stream().findFirst().get()) {
+            case "invNum" -> apInvoiceRepository.findByInvNumEqualsIgnoreCase(params.get("invNum"));
+            case "paymentMode" -> apInvoiceRepository.findByPaymentMode(PaymentMode.valueOf(params.get("paymentMode")));
+            case "dueDate" -> apInvoiceRepository.findByDueDateIsBefore(LocalDate.parse(params.get("dueDate")));
+            case "partnerId" -> apInvoiceRepository.findByPartnerId(params.get("partnerId"));
+            case "employeeId" -> apInvoiceRepository.findByEmployeeId(params.get("employeeId"));
+            case "invoiceStatus" -> apInvoiceRepository.findAllByInvoiceStatus(InvoiceStatus.valueOf(params.get("invoiceStatus")));
+            case "accountingDate" -> apInvoiceRepository.findByAccountingDateIsAfter(LocalDate.parse(params.get("accountingDate")));
+            default -> apInvoices;
+        };
         return modelMapper.map(apInvoices, targetListType);
     }
 
