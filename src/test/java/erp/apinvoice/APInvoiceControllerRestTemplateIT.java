@@ -20,6 +20,7 @@ import org.zalando.problem.Status;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
@@ -66,11 +67,11 @@ public class APInvoiceControllerRestTemplateIT {
     void init() {
         Address address = new Address("Hungary", "H-1029", "Pasareti ut 101.");
 
-        partnerDTO1 = template.postForObject("/api/partners", new CreatePartnerCommand("Anthony ltd.", address, "1122334455"), PartnerDTO.class);
+        partnerDTO1 = template.postForObject("/api/partners", new CreatePartnerCommand("Anthony ltd.", address, "1122334455", Set.of("FR123", "FR321")), PartnerDTO.class);
         String partnerId1 = partnerDTO1.getId();
-        partnerDTO2 = template.postForObject("/api/partners", new CreatePartnerCommand("Jaguar ltd.", address, "9898712455"), PartnerDTO.class);
+        partnerDTO2 = template.postForObject("/api/partners", new CreatePartnerCommand("Jaguar ltd.", address, "9898712455", Set.of("FR456", "FR654")), PartnerDTO.class);
         String partnerId2 = partnerDTO2.getId();
-        partnerDtoNoInvoice = template.postForObject("/api/partners", new CreatePartnerCommand("Attach Later ltd.", address, "9898712455"), PartnerDTO.class);
+        partnerDtoNoInvoice = template.postForObject("/api/partners", new CreatePartnerCommand("Attach Later ltd.", address, "9898712456", Set.of("FR789", "FR987")), PartnerDTO.class);
 
 
         employeeDTO1 = template.postForObject("/api/employees", new CreateEmployeeCommand("Anthony", "Doerr", EmployeeStatus.ACTIVE, address, LocalDate.of(2021,8,1)), EmployeeDTO.class);

@@ -51,10 +51,10 @@ public class PartnerControllerRestTemplateIT {
         address = new Address("Hungary", "H-1029", "Pasareti ut 101.");
         addressDTO = new AddressDTO("Hungary", "H-1029", "Pasareti ut 101.");
 
-        createPartnerCommand1 = new CreatePartnerCommand("Anthony Company ltd.", address, "123456789");
+        createPartnerCommand1 = new CreatePartnerCommand("Anthony Company ltd.", address, "123456789", Set.of("FR123", "FR321"));
         tuple1 = tuple("P-1", "Anthony Company ltd.", addressDTO, "123456789");
 
-        createPartnerCommand2 = new CreatePartnerCommand("Doerr Company ltd.", address, "987654321");
+        createPartnerCommand2 = new CreatePartnerCommand("Doerr Company ltd.", address, "987654321", Set.of("FR456", "FR654"));
         tuple2 = tuple("P-2", "Doerr Company ltd.", addressDTO, "987654321");
 
     }
