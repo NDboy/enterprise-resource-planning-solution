@@ -1,11 +1,11 @@
 create table partners
 (
-    id       varchar(4) not null,
-    name     varchar(50),
+    id       varchar(8) not null,
+    name     varchar(50) unique,
     country  varchar(30),
     zip_code varchar(10),
     line     varchar(50),
-    tax_no   varchar(20),
+    tax_no   varchar(20) unique,
     primary key (id)
 );
 
