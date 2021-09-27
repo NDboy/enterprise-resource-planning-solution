@@ -21,12 +21,23 @@ public class PaymentModeAndDatesDTO {
 
     private LocalDate dueDate;
 
-    private double grossValue;
+    private String iban;
+
+    private InvoiceCurrency invoiceCurrency;
+
+    private InvoiceValuesDTO invoiceValues;
 
     public PaymentModeAndDatesDTO(PaymentMode paymentMode, LocalDate invoicingDate, LocalDate dueDate) {
         this.paymentMode = paymentMode;
         this.invoicingDate = invoicingDate;
         this.dueDate = dueDate;
+    }
+
+    public PaymentModeAndDatesDTO(PaymentMode paymentMode, LocalDate invoicingDate, LocalDate dueDate, String iban) {
+        this.paymentMode = paymentMode;
+        this.invoicingDate = invoicingDate;
+        this.dueDate = dueDate;
+        this.iban = iban;
     }
 
     @Override

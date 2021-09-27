@@ -32,10 +32,10 @@ public class CreateAPInvoiceWithPartnerAndEmployeeIdCommand {
     @NotNull(message = "Invoice can not be created without items")
     private List<InvoiceItem> invoiceItems;
 
-    @Schema(example = "P-1")
+    @Schema(example = "P-00001")
     private String partnerId;
 
-    @Schema(example = "ado")
+    @Schema(example = "ADO-00001")
     private String employeeId;
 
     public CreateAPInvoiceWithPartnerAndEmployeeIdCommand(String invNum, PaymentModeAndDates paymentModeAndDates, InvoiceStatus invoiceStatus, List<InvoiceItem> invoiceItems) {

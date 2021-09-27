@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
@@ -31,14 +32,27 @@ public class PaymentModeAndDates {
     @Schema(example = "2021-08-06")
     private LocalDate dueDate;
 
-    private double grossValue;
+    private String iban;
+
+    @Enumerated(value = EnumType.STRING)
+    private InvoiceCurrency invoiceCurrency;
+
+    @Embedded
+    private InvoiceValues invoiceValues;
+
+
+    public PaymentModeAndDates(PaymentMode paymentMode, LocalDate invoicingDate, LocalDate dueDate, String iban) {
+        this.paymentMode = paymentMode;
+        this.invoicingDate = invoicingDate;
+        this.dueDate = dueDate;
+        this.iban = iban;
+    }
 
     public PaymentModeAndDates(PaymentMode paymentMode, LocalDate invoicingDate, LocalDate dueDate) {
         this.paymentMode = paymentMode;
         this.invoicingDate = invoicingDate;
         this.dueDate = dueDate;
     }
-
 
     @Override
     public boolean equals(Object o) {

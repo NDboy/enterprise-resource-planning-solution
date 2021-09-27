@@ -47,7 +47,6 @@ public class APInvoice {
     public APInvoice(String invNum, PaymentModeAndDates paymentModeAndDates, InvoiceStatus invoiceStatus, List<InvoiceItem> invoiceItems) {
         this.invNum = invNum;
         this.paymentModeAndDates = paymentModeAndDates;
-        this.paymentModeAndDates.setGrossValue(invoiceItems.stream().mapToDouble(InvoiceItem::getGrossPrice).sum());
         this.invoiceStatus = invoiceStatus;
         this.invoiceItems = invoiceItems;
     }
@@ -55,7 +54,6 @@ public class APInvoice {
     public APInvoice(String invNum, PaymentModeAndDates paymentModeAndDates, Partner partner, InvoiceStatus invoiceStatus, List<InvoiceItem> invoiceItems, Employee employee) {
         this.invNum = invNum;
         this.paymentModeAndDates = paymentModeAndDates;
-        this.paymentModeAndDates.setGrossValue(invoiceItems.stream().mapToDouble(InvoiceItem::getGrossPrice).sum());
         this.partner = partner;
         this.invoiceStatus = invoiceStatus;
         this.invoiceItems = invoiceItems;
@@ -66,7 +64,6 @@ public class APInvoice {
         this.id = id;
         this.invNum = invNum;
         this.paymentModeAndDates = paymentModeAndDates;
-        this.paymentModeAndDates.setGrossValue(invoiceItems.stream().mapToDouble(InvoiceItem::getGrossPrice).sum());
         this.partner = partner;
         this.invoiceStatus = invoiceStatus;
         this.invoiceItems = invoiceItems;
