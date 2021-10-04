@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -20,6 +21,6 @@ public class PartnerDTO {
 
     private String taxNo;
 
-    private Set<String> ibans;
+    private List<String> ibans;
 
 }

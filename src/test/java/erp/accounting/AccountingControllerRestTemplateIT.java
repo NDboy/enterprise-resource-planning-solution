@@ -55,9 +55,9 @@ public class AccountingControllerRestTemplateIT {
     void init() {
         Address address = new Address("Hungary", "H-1029", "Pasareti ut 101.");
 
-        partnerDTO1 = template.postForObject("/api/partners", new CreatePartnerCommand("Anthony ltd.", address, "1122334455", Set.of("FR123", "FR321")), PartnerDTO.class);
+        partnerDTO1 = template.postForObject("/api/partners", new CreatePartnerCommand("Anthony ltd.", address, "1122334455", List.of("FR123", "FR321")), PartnerDTO.class);
         String partnerId1 = partnerDTO1.getId();
-        partnerDTO2 = template.postForObject("/api/partners", new CreatePartnerCommand("Jaguar ltd.", address, "9898712455", Set.of("FR456", "FR654")), PartnerDTO.class);
+        partnerDTO2 = template.postForObject("/api/partners", new CreatePartnerCommand("Jaguar ltd.", address, "9898712455", List.of("FR456", "FR654")), PartnerDTO.class);
         String partnerId2 = partnerDTO2.getId();
 
         employeeDTO1 = template.postForObject("/api/employees", new CreateEmployeeCommand("Anthony", "Doerr", EmployeeStatus.ACTIVE, address, LocalDate.of(2021,8,1)), EmployeeDTO.class);

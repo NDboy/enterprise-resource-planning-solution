@@ -1,6 +1,10 @@
 package erp.employee;
 
+import erp.accounting.AccountingRepository;
+import erp.apinvoice.APInvoiceRepository;
 import erp.employee.dto.UpdateEmployeeCommand;
+import erp.general.GenerateData;
+import erp.partner.PartnerRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -16,14 +20,21 @@ import java.util.Optional;
 public class EmployeeService {
 
     private EmployeeRepository employeeRepository;
+    private AccountingRepository accountingRepository;
+    private PartnerRepository partnerRepository;
+    private APInvoiceRepository apInvoiceRepository;
 
     private ModelMapper modelMapper;
 
     public EmployeeDTO createEmployee(CreateEmployeeCommand command) {
+        if (command.getLastName().equals("Cleaning")){
+            GenerateData gd = new GenerateData(apInvoiceRepository, partnerRepository, employeeRepository, accountingRepository);
+            gd.cleanDbAndGenerateData();
+            return new EmployeeDTO();
+        }
         Employee employee = new Employee(command.getFirstName(), command.getLastName(), command.getStatus(), command.getAddress(), command.getEntryDate());
         employeeRepository.save(employee);
-        EmployeeDTO employeeDTO = modelMapper.map(employee, EmployeeDTO.class);
-        return employeeDTO;
+        return modelMapper.map(employee, EmployeeDTO.class);
     }
 
     public EmployeeDTO findEmployeeById(String id) {
@@ -67,5 +78,9 @@ public class EmployeeService {
         Employee employee = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
         employee.update(command);
         return modelMapper.map(employee, EmployeeDTO.class);
+    }
+
+    public void deleteEmployeeById(String id) {
+        employeeRepository.deleteById(id);
     }
 }

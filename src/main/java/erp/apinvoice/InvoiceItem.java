@@ -33,11 +33,11 @@ public class InvoiceItem {
     private double grossPrice;
 
     private void countVatAmount() {
-        vatAmount = netPrice * (vatRate / 100.0);
+        vatAmount = Math.round(netPrice * (vatRate / 100.0) * 100) / 100.0;
     }
 
     private void countGrossPrice() {
-        grossPrice = netPrice * (1 + (vatRate / 100.0));
+        grossPrice = Math.round(netPrice * (1 + (vatRate / 100.0)) * 100) / 100.0;
     }
 
     public InvoiceItem(String itemName, double netPrice, int vatRate) {

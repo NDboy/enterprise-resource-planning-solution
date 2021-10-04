@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -35,6 +35,6 @@ public class UpdatePartnerCommand {
 
     @JsonProperty
     @Schema(example = "[\"new123654\", \"new84617\"]")
-    private Set<String> ibans;
+    private List<String> ibans;
 
 }

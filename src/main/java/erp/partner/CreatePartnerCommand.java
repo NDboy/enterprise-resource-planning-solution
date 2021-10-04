@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -30,6 +31,6 @@ public class CreatePartnerCommand {
     private String taxNo;
 
     @Schema(example = "[\"123654\", \"84617\"]")
-    private Set<String> ibans;
+    private List<String> ibans;
 
 }

@@ -3,6 +3,7 @@ package erp.employee;
 import erp.employee.dto.UpdateEmployeeCommand;
 import erp.partner.dto.UpdatePartnerCommand;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -58,6 +59,13 @@ public class EmployeeController {
             description = "find employee by id and update")
     public EmployeeDTO updateEmployee(@PathVariable("id") String id, @Valid @RequestBody UpdateEmployeeCommand command) {
         return employeeService.updateEmployee(id, command);
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete Employee by id without APInvoice", description = "Delete Employee by id without APInvoice")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmployeeById(@Parameter(example = "ADO-00001") @PathVariable("id") String id) {
+        employeeService.deleteEmployeeById(id);
     }
 
 

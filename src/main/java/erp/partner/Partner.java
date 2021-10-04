@@ -11,6 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,7 +42,7 @@ public class Partner {
 
     @Schema(example = "[\"123654\", \"84617\"]")
     @ElementCollection(fetch = FetchType.EAGER)
-    private Set<String> ibans = new HashSet<>();
+    private List<String> ibans = new ArrayList<>();
 
     @OneToMany(mappedBy = "partner")
     private List<APInvoice> apInvoices;
@@ -52,7 +53,7 @@ public class Partner {
         this.taxNo = taxNo;
     }
 
-    public Partner(String name, Address address, String taxNo, Set<String> ibans) {
+    public Partner(String name, Address address, String taxNo, List<String> ibans) {
         this.name = name;
         this.address = address;
         this.taxNo = taxNo;
@@ -61,7 +62,7 @@ public class Partner {
 
     public void addIban(String iban) {
         if (ibans == null) {
-            ibans = new HashSet<>();
+            ibans = new ArrayList<>();
         }
         ibans.add(iban);
     }
@@ -70,7 +71,7 @@ public class Partner {
         String newName = command.getName();
         Address newAddress = command.getAddress();
         String newTaxNo = command.getTaxNo();
-        Set<String> newIbans = command.getIbans();
+        List<String> newIbans = command.getIbans();
         if (!empty(newName)) {
             setName(newName);
         }
